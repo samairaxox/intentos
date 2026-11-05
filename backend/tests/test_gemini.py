@@ -28,3 +28,20 @@ def test_sdk_failure_is_transparent(monkeypatch):
     with patch("app.services.gemini.genai.Client",side_effect=RuntimeError("offline")):
         with pytest.raises(AIUnavailable,match="Gemini request failed"):
             GeminiService().parse("Laptop under 75000")
+
+
+def test_explanations_render_only_catalog_facts():
+    from app.services.gemini import Explanations
+    recommendation={"product":{"id":"sample","price":65000,"ram_gb":16,"storage_gb":512,"weight_kg":1.4,"battery_hours":8,"processor_brand":"Intel","processor":"Core i5"},"score":82.5}
+    service=GeminiService()
+    with patch.object(service,"generate",return_value=Explanations(items=[{"product_id":"sample","reason_ids":["price","memory"]}])):
+        assert service.explain([recommendation])=={"sample":"Demo price: INR 65,000. Memory: 16 GB RAM. All mandatory constraints passed."}
+    with patch.object(service,"generate",return_value=Explanations(items=[{"product_id":"unknown","reason_ids":["price"]}])):
+        with pytest.raises(AIUnavailable,match="invalid explanation references"):
+            service.explain([recommendation])
+
+def test_explanations_cannot_invent_fact_types():
+    from pydantic import ValidationError
+    from app.services.gemini import Explanations
+    with pytest.raises(ValidationError):
+        Explanations(items=[{"product_id":"sample","reason_ids":["invented_discount"]}])

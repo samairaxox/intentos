@@ -1,7 +1,8 @@
 import json
+from typing import Literal
 from google import genai
 from google.genai import types
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from app.core.config import settings
 from app.models.schemas import Intent
 
@@ -10,7 +11,7 @@ class AIUnavailable(Exception):
 
 class Explanation(BaseModel):
     product_id: str
-    text: str
+    reason_ids: list[Literal["price", "memory", "storage", "portability", "battery", "processor", "score"]] = Field(min_length=1, max_length=4)
 
 class Explanations(BaseModel):
     items: list[Explanation]
@@ -33,8 +34,23 @@ class GeminiService:
     def explain(self, recommendations: list[dict]) -> dict[str, str]:
         if not recommendations:
             return {}
-        response = self.generate("Explain each supplied recommendation concisely using ONLY supplied facts and scores. All are demo data. Never invent reviews, benchmarks, discounts or delivery. Return one item per product ID. Data: " + json.dumps(recommendations), Explanations)
+        response = self.generate("Explain why each recommendation suits the user by selecting 1 to 4 most relevant reason_ids from price, memory, storage, portability, battery, processor, score. These IDs reference supplied catalog facts only; backend will render their exact values. All data is demo. Return exactly one item per product ID. Data: " + json.dumps(recommendations), Explanations)
         expected = {r["product"]["id"] for r in recommendations}
         if {item.product_id for item in response.items} != expected or len(response.items) != len(expected):
             raise AIUnavailable("Gemini returned invalid explanation references.")
-        return {item.product_id:item.text for item in response.items}
+        catalog = {r["product"]["id"]:r for r in recommendations}
+        grounded = {}
+        for item in response.items:
+            record = catalog[item.product_id]
+            product = record["product"]
+            facts = {
+                "price": f"Demo price: INR {product['price']:,}",
+                "memory": f"Memory: {product['ram_gb']} GB RAM",
+                "storage": f"Storage: {product['storage_gb']} GB",
+                "portability": f"Weight: {product['weight_kg']} kg",
+                "battery": f"Catalog battery estimate: {product['battery_hours']} hours",
+                "processor": f"Processor: {product['processor_brand']} {product['processor']}",
+                "score": f"Deterministic match score: {record['score']}/100",
+            }
+            grounded[item.product_id] = ". ".join(facts[key] for key in dict.fromkeys(item.reason_ids)) + ". All mandatory constraints passed."
+        return grounded
