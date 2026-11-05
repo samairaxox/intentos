@@ -16,6 +16,21 @@ def event(db, order, name):
     db.add(AuditEvent(order_id=order.id, event=name))
 
 def verify(db, order):
+    if order.cart_id:
+        from app.services.bundle_checkout import verify_bundle
+        return verify_bundle(db,order)
+    try:
+        return verify_single(db,order)
+    except HTTPException:
+        if order.id and order.status in ["PENDING_APPROVAL", "APPROVED"]:
+            order.status="CANCELLED"
+            event(db,order,"APPROVAL_INVALIDATED")
+            event(db,order,"CANCELLED")
+            db.commit()
+        raise
+
+
+def verify_single(db, order):
     product = db.scalar(select(Product).where(Product.id==order.product_id).with_for_update().execution_options(populate_existing=True))
     session = db.get(PurchaseSession, order.session_id)
     if not product or not session or not eligible(product.data, Intent.model_validate(session.result["intent"])):
@@ -48,7 +63,9 @@ def create_order(db, request):
 
 def approve(db, order_id):
     order = get_order(db,order_id)
-    if order.status == "APPROVED": return order
+    if order.status == "APPROVED":
+        verify(db,order)
+        return order
     verify(db,order)
     changed = db.execute(update(Order).where(Order.id==order_id, Order.status=="PENDING_APPROVAL").values(status="APPROVED"))
     if changed.rowcount != 1:

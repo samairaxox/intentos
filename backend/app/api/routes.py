@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.models.entities import PurchaseSession, Product, AuditEvent, Payment
+from app.models.entities import PurchaseSession, Product, AuditEvent, Payment, OrderItem
 from app.models.schemas import AnalyzeRequest, CreateOrder, Approval, PayRequest, OrderOut, PaymentOut, CatalogProduct, PurchaseOut, EventOut
 from app.services.catalog import LocalCatalogProvider
 from app.services.gemini import GeminiService, AIUnavailable
@@ -46,7 +46,9 @@ def create(request: CreateOrder, db: Session = Depends(get_db)):
 def read_order(order_id: str, db: Session = Depends(get_db)):
     order = orders.get_order(db,order_id)
     payment = db.scalar(select(Payment).where(Payment.order_id==order_id))
-    return {**OrderOut.model_validate(order).model_dump(), "payment":PaymentOut.model_validate(payment) if payment else None}
+    items=list(db.scalars(select(OrderItem).where(OrderItem.order_id==order_id)))
+    return {**OrderOut.model_validate(order).model_dump(), "payment":PaymentOut.model_validate(payment) if payment else None,
+            "items":[{"product_id":i.product_id,"quantity":i.quantity,"unit_price":i.unit_price,"seller":i.seller,"snapshot":i.snapshot} for i in items]}
 
 @router.post("/orders/{order_id}/approve", response_model=OrderOut)
 def approve(order_id: str, request: Approval, db: Session = Depends(get_db)):

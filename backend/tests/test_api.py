@@ -122,7 +122,7 @@ def test_unavailable_after_approval(client):
         product=db.get(Product,payload['product_id'])
         product.data={**product.data,'available':False};db.commit()
     assert client.post(path+'/pay',json={'idempotency_key':'unavailable-key'}).status_code==409
-    assert client.get(path).json()['status']=='APPROVED'
+    assert client.get(path).json()['status']=='CANCELLED'
 
 
 def test_client_price_and_amount_rejected(client):

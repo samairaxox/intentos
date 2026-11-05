@@ -54,7 +54,9 @@ class OrderOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: str
     session_id: str
-    product_id: str
+    product_id: str | None
+    cart_id: str | None = None
+    items: list[dict] = Field(default_factory=list)
     amount: int
     currency: str
     status: str

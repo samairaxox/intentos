@@ -102,3 +102,52 @@ class BundleOrderRequest(BaseModel):
     cart_id: str
     cart_version: int = Field(ge=1)
     idempotency_key: str = Field(min_length=8, max_length=100)
+
+
+class PlanLine(BaseModel):
+    product: DemoProduct
+    quantity: int
+    unit_price: int
+    line_total: int
+    utility: int
+    reason: str
+
+class Combination(BaseModel):
+    items: list[PlanLine]
+    total_cost: int
+    remaining_budget: int
+    utility_score: int
+    category_spending: dict[str,int]
+    omitted_optional: list[str]
+    tradeoffs: list[str]
+    solver_status: str | None = None
+
+class PlanResult(BaseModel):
+    combinations: list[Combination] = Field(default_factory=list)
+    candidates: dict[str,list[DemoProduct]] = Field(default_factory=dict)
+    missing_information: list[str] = Field(default_factory=list)
+    status: str | None = None
+    revised_plan_id: str | None = None
+
+class PlanOut(BaseModel):
+    id: str
+    session_id: str
+    parent_id: str | None
+    revision: int
+    status: str
+    intent: MultiIntent
+    result: PlanResult
+    workflow: dict
+    changes: list[str]
+
+class CartOut(BaseModel):
+    id: str
+    plan_id: str
+    version: int
+    status: str
+    snapshot: Combination
+
+class DemoChange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    product_id: str
+    change: Literal["unavailable", "price_increase", "price_decrease", "seller_unavailable"]
