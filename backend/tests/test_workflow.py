@@ -56,3 +56,10 @@ def test_impossible(catalog,intent):
 def test_missing_details(catalog):
     result=build_workflow(FakeAI(Intent(category="laptop")),Provider(catalog)).invoke({"text":"laptop"})
     assert result["status"]=="NEEDS_DETAILS"
+
+
+def test_category_and_seller_filter(catalog, intent):
+    candidate=next(p for p in catalog if eligible(p,intent))
+    assert not eligible({**candidate,"category":"monitor"},intent)
+    assert not eligible({**candidate,"seller_available":False},intent)
+    assert not eligible({**candidate,"stock":0},intent)

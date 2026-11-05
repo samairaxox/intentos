@@ -17,7 +17,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Lenovo",
+    "model": "ThinkPad E14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 60,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 8,
+      "storage_gb": 512,
+      "weight_kg": 1.2,
+      "battery_hours": 6,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-02",
@@ -37,7 +51,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Lenovo",
+    "model": "IdeaPad Slim 5",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 65,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.38,
+      "battery_hours": 7,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-03",
@@ -57,7 +85,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Dell",
+    "model": "Inspiron 14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 70,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.56,
+      "battery_hours": 8,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-04",
@@ -77,7 +119,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "ASUS",
+    "model": "Vivobook 15",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 75,
+    "specifications": {
+      "processor_brand": "AMD",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.74,
+      "battery_hours": 9,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-05",
@@ -97,7 +153,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "HP",
+    "model": "Pavilion 14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 80,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.92,
+      "battery_hours": 10,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-06",
@@ -117,7 +187,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Acer",
+    "model": "Swift Go 14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 85,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 2.1,
+      "battery_hours": 11,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-07",
@@ -137,7 +221,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Acer",
+    "model": "Aspire 5",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 90,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.2,
+      "battery_hours": 12,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-08",
@@ -157,7 +255,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "ASUS",
+    "model": "Zenbook 14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 95,
+    "specifications": {
+      "processor_brand": "AMD",
+      "ram_gb": 8,
+      "storage_gb": 512,
+      "weight_kg": 1.38,
+      "battery_hours": 6,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-09",
@@ -177,7 +289,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Lenovo",
+    "model": "ThinkBook 14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 60,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.56,
+      "battery_hours": 7,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-10",
@@ -197,7 +323,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "MSI",
+    "model": "Modern 14",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 65,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.74,
+      "battery_hours": 8,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-11",
@@ -217,7 +357,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Samsung",
+    "model": "Galaxy Book4",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 70,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.92,
+      "battery_hours": 9,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-12",
@@ -237,7 +391,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Lenovo",
+    "model": "Yoga Slim 6",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 75,
+    "specifications": {
+      "processor_brand": "AMD",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 2.1,
+      "battery_hours": 10,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-13",
@@ -257,7 +425,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "ASUS",
+    "model": "ExpertBook B1",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 80,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.2,
+      "battery_hours": 11,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-14",
@@ -277,7 +459,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Dell",
+    "model": "Vostro 15",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 85,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.38,
+      "battery_hours": 12,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-15",
@@ -297,7 +493,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "HP",
+    "model": "Envy x360",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 90,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 8,
+      "storage_gb": 512,
+      "weight_kg": 1.56,
+      "battery_hours": 6,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-16",
@@ -317,7 +527,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Acer",
+    "model": "Nitro V",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 95,
+    "specifications": {
+      "processor_brand": "AMD",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.74,
+      "battery_hours": 7,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-17",
@@ -337,7 +561,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Lenovo",
+    "model": "LOQ 15",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 60,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.92,
+      "battery_hours": 8,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-18",
@@ -357,7 +595,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "HP",
+    "model": "Victus 15",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 65,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 2.1,
+      "battery_hours": 9,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-19",
@@ -377,7 +629,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Apple",
+    "model": "MacBook Air M2",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 70,
+    "specifications": {
+      "processor_brand": "Apple",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.2,
+      "battery_hours": 10,
+      "gpu": "integrated",
+      "os": "macOS"
+    }
   },
   {
     "id": "demo-20",
@@ -397,7 +663,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Acer",
+    "model": "Swift Lite",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 75,
+    "specifications": {
+      "processor_brand": "AMD",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.38,
+      "battery_hours": 11,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-21",
@@ -417,7 +697,21 @@
     "seller": "IntentOS Demo Merchant",
     "available": false,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "Lenovo",
+    "model": "IdeaPad Pro 5",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 80,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "weight_kg": 1.56,
+      "battery_hours": 12,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   },
   {
     "id": "demo-22",
@@ -437,6 +731,20 @@
     "seller": "IntentOS Demo Merchant",
     "available": true,
     "source_type": "demo",
-    "timestamp": "2026-11-05T00:00:00Z"
+    "timestamp": "2026-11-05T00:00:00Z",
+    "brand": "ASUS",
+    "model": "Vivobook Go",
+    "stock": 10,
+    "seller_available": true,
+    "quality_score": 85,
+    "specifications": {
+      "processor_brand": "Intel",
+      "ram_gb": 8,
+      "storage_gb": 512,
+      "weight_kg": 1.74,
+      "battery_hours": 6,
+      "gpu": "integrated",
+      "os": "Windows"
+    }
   }
 ]

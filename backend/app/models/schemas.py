@@ -1,5 +1,5 @@
 from typing import Literal
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 class Constraint(BaseModel):
     field: Literal["processor_brand", "ram_gb", "weight_kg", "storage_gb", "battery_hours", "gpu", "os"]
@@ -30,6 +30,13 @@ class CreateOrder(BaseModel):
 class Approval(BaseModel):
     model_config = ConfigDict(extra="forbid")
     approved: Literal[True]
+
+    @field_validator("approved", mode="before")
+    @classmethod
+    def explicit_boolean(cls, value):
+        if value is not True:
+            raise ValueError("Approval must be the JSON boolean true")
+        return value
 
 class PayRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")

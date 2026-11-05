@@ -17,7 +17,7 @@ def get_ai(): return GeminiService()
 
 @router.get("/products", response_model=list[CatalogProduct])
 def products(db: Session = Depends(get_db)) -> list[dict]:
-    return LocalCatalogProvider(db).discover()
+    return LocalCatalogProvider(db).discover(["laptop"])
 
 @router.post("/purchases/analyze", status_code=201, response_model=PurchaseOut)
 def analyze(request: AnalyzeRequest, db: Session = Depends(get_db), ai = Depends(get_ai)) -> dict:

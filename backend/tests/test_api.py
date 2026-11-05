@@ -51,6 +51,7 @@ def test_approval_and_duplicate_payment(client):
     path='/api/v1/orders/'+order['id']
     assert client.post(path+'/pay',json={'idempotency_key':'payment-key-1'}).status_code==409
     assert client.post(path+'/approve',json={'approved':False}).status_code==422
+    assert client.post(path+'/approve',json={'approved':1}).status_code==422
     assert client.post(path+'/approve',json={'approved':True}).json()['status']=='APPROVED'
     body={'idempotency_key':'payment-key-1'}
     first=client.post(path+'/pay',json=body)

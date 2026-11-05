@@ -13,7 +13,9 @@ def satisfies(product: dict, rule: Constraint) -> bool:
         return False
 
 def eligible(product: dict, intent: Intent) -> bool:
-    return bool(product["available"] and intent.max_budget is not None
+    return bool(product.get("category") == intent.category.casefold()
+                and product["available"] and product.get("seller_available", True)
+                and product.get("stock", 1) > 0 and intent.max_budget is not None
                 and product["currency"] == intent.currency
                 and product["price"] <= intent.max_budget
                 and all(satisfies(product, r) for r in intent.required_specifications + intent.hard_constraints))
