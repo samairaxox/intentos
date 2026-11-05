@@ -21,6 +21,8 @@ def eligible(product: dict, intent: Intent) -> bool:
 def rank(products: list[dict], intent: Intent) -> list[dict]:
     results = []
     preferences = intent.preferred_specifications + intent.soft_preferences
+    technical = any(word in intent.use_case.casefold() for word in ("coding", "development", "ai", "gaming", "engineering"))
+    weights = {"performance":.4 if technical else .3,"value":.2,"portability":.1 if technical else .15,"battery":.1 if technical else .15,"preferences":.2}
     for p in products:
         scores = {
             "performance": min(p["performance"] / 100, 1),
@@ -29,7 +31,7 @@ def rank(products: list[dict], intent: Intent) -> list[dict]:
             "battery": min(p["battery_hours"] / 15, 1),
             "preferences": sum(satisfies(p, r) for r in preferences) / len(preferences) if preferences else .5,
         }
-        score = sum(scores[k] * w for k, w in {"performance":.3,"value":.2,"portability":.15,"battery":.15,"preferences":.2}.items())
+        score = sum(scores[k] * w for k, w in weights.items())
         results.append({"product":p,"score":round(score*100,2),"breakdown":scores,
                         "tradeoffs":[f"Weight: {p['weight_kg']} kg", f"Catalog battery estimate: {p['battery_hours']} hours"]})
     return sorted(results, key=lambda r: (-r["score"], r["product"]["price"], r["product"]["id"]))

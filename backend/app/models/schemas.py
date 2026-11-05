@@ -18,19 +18,30 @@ class Intent(BaseModel):
     missing_essential_details: list[str] = Field(default_factory=list)
 
 class AnalyzeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     text: str = Field(min_length=10, max_length=4000)
 
 class CreateOrder(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     session_id: str
     product_id: str
     idempotency_key: str = Field(min_length=8, max_length=100)
 
 class Approval(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     approved: Literal[True]
 
 class PayRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     idempotency_key: str = Field(min_length=8, max_length=100)
     simulate_failure: bool = False
+
+class PaymentOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: str
+    order_id: str
+    amount: int
+    status: str
 
 class OrderOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -41,9 +52,4 @@ class OrderOut(BaseModel):
     currency: str
     status: str
 
-class PaymentOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    id: str
-    order_id: str
-    amount: int
-    status: str
+    payment: PaymentOut | None = None

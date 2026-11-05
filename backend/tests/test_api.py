@@ -60,6 +60,7 @@ def test_approval_and_duplicate_payment(client):
     assert client.post(path+'/pay',json={'idempotency_key':'different-key'}).status_code==409
     assert client.post(path+'/approve',json={'approved':True}).status_code==409
     assert client.get(path).json()['status']=='PAID'
+    assert client.get(path).json()['payment']['id']==first.json()['id']
     assert [e['event'] for e in client.get(path+'/events').json()]==['PENDING_APPROVAL','APPROVED','PAYMENT_PROCESSING','PAID']
     with client.factory() as db: assert len(list(db.scalars(select(Payment))))==1
 
@@ -100,3 +101,30 @@ def test_reject_unrecommended_product_and_key_reuse(client):
     order,payload=make_order(client)
     assert client.post('/api/v1/orders',json={**payload,'product_id':'demo-22'}).status_code==409
     assert client.post('/api/v1/orders',json={**payload,'product_id':'demo-22','idempotency_key':'fresh-key'}).status_code==422
+
+
+def test_cross_order_payment_key_conflict(client):
+    first,_=make_order(client)
+    second,_=make_order(client,'second-order-key')
+    for order in [first,second]:
+        assert client.post('/api/v1/orders/'+order['id']+'/approve',json={'approved':True}).status_code==200
+    body={'idempotency_key':'shared-payment-key'}
+    assert client.post('/api/v1/orders/'+first['id']+'/pay',json=body).status_code==200
+    assert client.post('/api/v1/orders/'+second['id']+'/pay',json=body).status_code==409
+    assert client.get('/api/v1/orders/'+second['id']).json()['status']=='APPROVED'
+
+def test_unavailable_after_approval(client):
+    order,payload=make_order(client)
+    path='/api/v1/orders/'+order['id']
+    client.post(path+'/approve',json={'approved':True})
+    with client.factory() as db:
+        product=db.get(Product,payload['product_id'])
+        product.data={**product.data,'available':False};db.commit()
+    assert client.post(path+'/pay',json={'idempotency_key':'unavailable-key'}).status_code==409
+    assert client.get(path).json()['status']=='APPROVED'
+
+
+def test_client_price_and_amount_rejected(client):
+    order,payload=make_order(client)
+    assert client.post('/api/v1/orders',json={**payload,'price':1}).status_code==422
+    assert client.post('/api/v1/orders/'+order['id']+'/pay',json={'idempotency_key':'tamper-key','amount':1}).status_code==422

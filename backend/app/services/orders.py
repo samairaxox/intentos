@@ -5,6 +5,7 @@ from app.models.entities import Order, Payment, AuditEvent, PurchaseSession, Pro
 from app.models.schemas import Intent
 from app.services.optimization import eligible
 from app.core.config import settings
+from app.services.payments import MockPaymentGateway
 
 def get_order(db, order_id):
     order = db.get(Order, order_id)
@@ -15,7 +16,7 @@ def event(db, order, name):
     db.add(AuditEvent(order_id=order.id, event=name))
 
 def verify(db, order):
-    product = db.get(Product, order.product_id)
+    product = db.scalar(select(Product).where(Product.id==order.product_id).with_for_update().execution_options(populate_existing=True))
     session = db.get(PurchaseSession, order.session_id)
     if not product or not session or not eligible(product.data, Intent.model_validate(session.result["intent"])):
         raise HTTPException(409, "Product is unavailable or no longer meets constraints")
@@ -79,7 +80,7 @@ def pay(db, order_id, request):
         db.rollback(); raise HTTPException(409,"Explicit approval is required; order cannot be paid in its current state")
     try:
         event(db,order,"PAYMENT_PROCESSING")
-        status = "PAYMENT_FAILED" if request.simulate_failure else "PAID"
+        status = MockPaymentGateway().charge(order_id=order.id, amount=order.amount, simulate_failure=request.simulate_failure).status
         payment = Payment(order_id=order.id,idempotency_key=request.idempotency_key,status=status,amount=order.amount)
         db.add(payment)
         order.status = status
