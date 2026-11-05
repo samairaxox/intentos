@@ -53,3 +53,44 @@ class OrderOut(BaseModel):
     status: str
 
     payment: PaymentOut | None = None
+
+
+class CatalogProduct(BaseModel):
+    id: str
+    name: str
+    category: str
+    price: int
+    currency: str
+    processor_brand: str
+    processor: str
+    ram_gb: int
+    storage_gb: int
+    weight_kg: float
+    battery_hours: float
+    gpu: str
+    os: str
+    performance: float
+    seller: str
+    available: bool
+    source_type: Literal["demo"]
+    timestamp: str
+
+class Recommendation(BaseModel):
+    product: CatalogProduct
+    score: float
+    breakdown: dict[str, float]
+    tradeoffs: list[str]
+    explanation: str
+
+class PurchaseOut(BaseModel):
+    id: str
+    text: str
+    status: Literal["READY", "NO_MATCH", "NEEDS_DETAILS"]
+    intent: Intent
+    steps: list[str]
+    recommendations: list[Recommendation] = Field(default_factory=list)
+
+class EventOut(BaseModel):
+    id: str
+    event: str
+    created_at: str
