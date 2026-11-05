@@ -8,7 +8,7 @@
     "price": 8500,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.2,
+      "weight_kg": 3.5,
       "connectivity": "wired",
       "screen_inches": 24,
       "refresh_hz": 75,
@@ -33,7 +33,7 @@
     "price": 10300,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.3,
+      "weight_kg": 3.9,
       "connectivity": "wireless",
       "screen_inches": 24,
       "refresh_hz": 90,
@@ -58,7 +58,7 @@
     "price": 12100,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.4,
+      "weight_kg": 4.3,
       "connectivity": "wired",
       "screen_inches": 24,
       "refresh_hz": 105,
@@ -83,7 +83,7 @@
     "price": 13900,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.5,
+      "weight_kg": 4.7,
       "connectivity": "wireless",
       "screen_inches": 27,
       "refresh_hz": 120,
@@ -108,7 +108,7 @@
     "price": 15700,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.6,
+      "weight_kg": 5.1,
       "connectivity": "wired",
       "screen_inches": 27,
       "refresh_hz": 135,
@@ -133,7 +133,7 @@
     "price": 17500,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.7,
+      "weight_kg": 5.5,
       "connectivity": "wireless",
       "screen_inches": 27,
       "refresh_hz": 150,
@@ -158,7 +158,7 @@
     "price": 1200,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.2,
+      "weight_kg": 0.55,
       "connectivity": "wired",
       "mechanical": false
     },
@@ -180,7 +180,7 @@
     "price": 1800,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.3,
+      "weight_kg": 0.63,
       "connectivity": "wireless",
       "mechanical": false
     },
@@ -202,7 +202,7 @@
     "price": 2400,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.4,
+      "weight_kg": 0.71,
       "connectivity": "wired",
       "mechanical": true
     },
@@ -224,7 +224,7 @@
     "price": 3000,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.5,
+      "weight_kg": 0.79,
       "connectivity": "wireless",
       "mechanical": true
     },
@@ -246,7 +246,7 @@
     "price": 3600,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.6,
+      "weight_kg": 0.87,
       "connectivity": "wired",
       "mechanical": true
     },
@@ -268,7 +268,7 @@
     "price": 4200,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.7,
+      "weight_kg": 0.95,
       "connectivity": "wireless",
       "mechanical": true
     },
@@ -290,7 +290,7 @@
     "price": 600,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.2,
+      "weight_kg": 0.075,
       "connectivity": "wired",
       "dpi": 1600
     },
@@ -312,7 +312,7 @@
     "price": 1200,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.3,
+      "weight_kg": 0.08,
       "connectivity": "wireless",
       "dpi": 2400
     },
@@ -334,7 +334,7 @@
     "price": 1800,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.4,
+      "weight_kg": 0.085,
       "connectivity": "wired",
       "dpi": 3200
     },
@@ -356,7 +356,7 @@
     "price": 2400,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.5,
+      "weight_kg": 0.09,
       "connectivity": "wireless",
       "dpi": 4000
     },
@@ -378,7 +378,7 @@
     "price": 3000,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.6,
+      "weight_kg": 0.095,
       "connectivity": "wired",
       "dpi": 4800
     },
@@ -400,7 +400,7 @@
     "price": 3600,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.7,
+      "weight_kg": 0.1,
       "connectivity": "wireless",
       "dpi": 5600
     },
@@ -422,7 +422,7 @@
     "price": 1500,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.2,
+      "weight_kg": 0.22,
       "connectivity": "wired",
       "noise_cancelling": false,
       "battery_hours": 16
@@ -445,7 +445,7 @@
     "price": 2100,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.3,
+      "weight_kg": 0.245,
       "connectivity": "wireless",
       "noise_cancelling": false,
       "battery_hours": 20
@@ -468,7 +468,7 @@
     "price": 2700,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.4,
+      "weight_kg": 0.27,
       "connectivity": "wired",
       "noise_cancelling": false,
       "battery_hours": 24
@@ -491,7 +491,7 @@
     "price": 3300,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.5,
+      "weight_kg": 0.295,
       "connectivity": "wireless",
       "noise_cancelling": true,
       "battery_hours": 28
@@ -514,7 +514,7 @@
     "price": 3900,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.6,
+      "weight_kg": 0.32,
       "connectivity": "wired",
       "noise_cancelling": true,
       "battery_hours": 32
@@ -537,7 +537,7 @@
     "price": 4500,
     "currency": "INR",
     "specifications": {
-      "weight_kg": 0.7,
+      "weight_kg": 0.345,
       "connectivity": "wireless",
       "noise_cancelling": true,
       "battery_hours": 36

@@ -1,0 +1,3104 @@
+[
+  {
+    "id": "single-01",
+    "kind": "single",
+    "variant": 0,
+    "request": "Reproducible single purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "hard_constraints": [
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            },
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            }
+          ]
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "single-02",
+    "kind": "single",
+    "variant": 1,
+    "request": "Reproducible single purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "hard_constraints": [
+            {
+              "field": "screen_inches",
+              "operator": "min",
+              "value": 27
+            }
+          ]
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "single-03",
+    "kind": "single",
+    "variant": 2,
+    "request": "Reproducible single purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "hard_constraints": [
+            {
+              "field": "mechanical",
+              "operator": "eq",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "single-04",
+    "kind": "single",
+    "variant": 3,
+    "request": "Reproducible single purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "hard_constraints": [
+            {
+              "field": "noise_cancelling",
+              "operator": "eq",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "multi-01",
+    "kind": "multi",
+    "variant": 0,
+    "request": "Reproducible multi purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "multi-02",
+    "kind": "multi",
+    "variant": 1,
+    "request": "Reproducible multi purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 2,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "multi-03",
+    "kind": "multi",
+    "variant": 2,
+    "request": "Reproducible multi purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "multi-04",
+    "kind": "multi",
+    "variant": 3,
+    "request": "Reproducible multi purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": false,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "strict_budget-01",
+    "kind": "strict_budget",
+    "variant": 0,
+    "request": "Reproducible strict_budget purchasing scenario 1",
+    "intent": {
+      "total_budget": 58000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "strict_budget-02",
+    "kind": "strict_budget",
+    "variant": 1,
+    "request": "Reproducible strict_budget purchasing scenario 2",
+    "intent": {
+      "total_budget": 61000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "strict_budget-03",
+    "kind": "strict_budget",
+    "variant": 2,
+    "request": "Reproducible strict_budget purchasing scenario 3",
+    "intent": {
+      "total_budget": 64000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "strict_budget-04",
+    "kind": "strict_budget",
+    "variant": 3,
+    "request": "Reproducible strict_budget purchasing scenario 4",
+    "intent": {
+      "total_budget": 68000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "impossible_budget-01",
+    "kind": "impossible_budget",
+    "variant": 0,
+    "request": "Reproducible impossible_budget purchasing scenario 1",
+    "intent": {
+      "total_budget": 100,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "impossible_budget-02",
+    "kind": "impossible_budget",
+    "variant": 1,
+    "request": "Reproducible impossible_budget purchasing scenario 2",
+    "intent": {
+      "total_budget": 101,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "impossible_budget-03",
+    "kind": "impossible_budget",
+    "variant": 2,
+    "request": "Reproducible impossible_budget purchasing scenario 3",
+    "intent": {
+      "total_budget": 102,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "impossible_budget-04",
+    "kind": "impossible_budget",
+    "variant": 3,
+    "request": "Reproducible impossible_budget purchasing scenario 4",
+    "intent": {
+      "total_budget": 103,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "conflicting-01",
+    "kind": "conflicting",
+    "variant": 0,
+    "request": "Reproducible conflicting purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 32
+            },
+            {
+              "field": "ram_gb",
+              "operator": "max",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "conflicting-02",
+    "kind": "conflicting",
+    "variant": 1,
+    "request": "Reproducible conflicting purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 32
+            },
+            {
+              "field": "ram_gb",
+              "operator": "max",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "conflicting-03",
+    "kind": "conflicting",
+    "variant": 2,
+    "request": "Reproducible conflicting purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 32
+            },
+            {
+              "field": "ram_gb",
+              "operator": "max",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "conflicting-04",
+    "kind": "conflicting",
+    "variant": 3,
+    "request": "Reproducible conflicting purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 32
+            },
+            {
+              "field": "ram_gb",
+              "operator": "max",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "INFEASIBLE"
+  },
+  {
+    "id": "missing-01",
+    "kind": "missing",
+    "variant": 0,
+    "request": "Reproducible missing purchasing scenario 1",
+    "intent": {
+      "total_budget": null,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "NEEDS_DETAILS"
+  },
+  {
+    "id": "missing-02",
+    "kind": "missing",
+    "variant": 1,
+    "request": "Reproducible missing purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "NEEDS_DETAILS"
+  },
+  {
+    "id": "missing-03",
+    "kind": "missing",
+    "variant": 2,
+    "request": "Reproducible missing purchasing scenario 3",
+    "intent": {
+      "total_budget": null,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "NEEDS_DETAILS"
+  },
+  {
+    "id": "missing-04",
+    "kind": "missing",
+    "variant": 3,
+    "request": "Reproducible missing purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "NEEDS_DETAILS"
+  },
+  {
+    "id": "unavailable-01",
+    "kind": "unavailable",
+    "variant": 0,
+    "request": "Reproducible unavailable purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "unavailable-02",
+    "kind": "unavailable",
+    "variant": 1,
+    "request": "Reproducible unavailable purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "unavailable-03",
+    "kind": "unavailable",
+    "variant": 2,
+    "request": "Reproducible unavailable purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "unavailable-04",
+    "kind": "unavailable",
+    "variant": 3,
+    "request": "Reproducible unavailable purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_increase-01",
+    "kind": "price_increase",
+    "variant": 0,
+    "request": "Reproducible price_increase purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_increase-02",
+    "kind": "price_increase",
+    "variant": 1,
+    "request": "Reproducible price_increase purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_increase-03",
+    "kind": "price_increase",
+    "variant": 2,
+    "request": "Reproducible price_increase purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_increase-04",
+    "kind": "price_increase",
+    "variant": 3,
+    "request": "Reproducible price_increase purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_decrease-01",
+    "kind": "price_decrease",
+    "variant": 0,
+    "request": "Reproducible price_decrease purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_decrease-02",
+    "kind": "price_decrease",
+    "variant": 1,
+    "request": "Reproducible price_decrease purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_decrease-03",
+    "kind": "price_decrease",
+    "variant": 2,
+    "request": "Reproducible price_decrease purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "price_decrease-04",
+    "kind": "price_decrease",
+    "variant": 3,
+    "request": "Reproducible price_decrease purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "seller_unavailable-01",
+    "kind": "seller_unavailable",
+    "variant": 0,
+    "request": "Reproducible seller_unavailable purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "seller_unavailable-02",
+    "kind": "seller_unavailable",
+    "variant": 1,
+    "request": "Reproducible seller_unavailable purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "seller_unavailable-03",
+    "kind": "seller_unavailable",
+    "variant": 2,
+    "request": "Reproducible seller_unavailable purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "seller_unavailable-04",
+    "kind": "seller_unavailable",
+    "variant": 3,
+    "request": "Reproducible seller_unavailable purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "budget_change-01",
+    "kind": "budget_change",
+    "variant": 0,
+    "request": "Reproducible budget_change purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "budget_change-02",
+    "kind": "budget_change",
+    "variant": 1,
+    "request": "Reproducible budget_change purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "budget_change-03",
+    "kind": "budget_change",
+    "variant": 2,
+    "request": "Reproducible budget_change purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "budget_change-04",
+    "kind": "budget_change",
+    "variant": 3,
+    "request": "Reproducible budget_change purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "preference_change-01",
+    "kind": "preference_change",
+    "variant": 0,
+    "request": "Reproducible preference_change purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "preference_change-02",
+    "kind": "preference_change",
+    "variant": 1,
+    "request": "Reproducible preference_change purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "preference_change-03",
+    "kind": "preference_change",
+    "variant": 2,
+    "request": "Reproducible preference_change purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "preference_change-04",
+    "kind": "preference_change",
+    "variant": 3,
+    "request": "Reproducible preference_change purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "payment_failure-01",
+    "kind": "payment_failure",
+    "variant": 0,
+    "request": "Reproducible payment_failure purchasing scenario 1",
+    "intent": {
+      "total_budget": 100000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "payment_failure-02",
+    "kind": "payment_failure",
+    "variant": 1,
+    "request": "Reproducible payment_failure purchasing scenario 2",
+    "intent": {
+      "total_budget": 105000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "payment_failure-03",
+    "kind": "payment_failure",
+    "variant": 2,
+    "request": "Reproducible payment_failure purchasing scenario 3",
+    "intent": {
+      "total_budget": 110000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5,
+          "hard_constraints": [
+            {
+              "field": "ram_gb",
+              "operator": "min",
+              "value": 16
+            },
+            {
+              "field": "processor_brand",
+              "operator": "eq",
+              "value": "Intel"
+            }
+          ]
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  },
+  {
+    "id": "payment_failure-04",
+    "kind": "payment_failure",
+    "variant": 3,
+    "request": "Reproducible payment_failure purchasing scenario 4",
+    "intent": {
+      "total_budget": 115000,
+      "currency": "INR",
+      "items": [
+        {
+          "category": "laptop",
+          "quantity": 1,
+          "required": true,
+          "priority": 5
+        },
+        {
+          "category": "monitor",
+          "quantity": 1,
+          "required": true,
+          "priority": 3,
+          "soft_preferences": [
+            {
+              "field": "refresh_hz",
+              "operator": "min",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "category": "keyboard",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "mouse",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        },
+        {
+          "category": "headphones",
+          "quantity": 1,
+          "required": true,
+          "priority": 3
+        }
+      ],
+      "weights": {
+        "performance": 5,
+        "value": 4,
+        "cost_savings": 2
+      },
+      "use_case": "coding",
+      "priorities": [
+        "Laptop performance",
+        "Good value"
+      ]
+    },
+    "expected": "READY"
+  }
+]

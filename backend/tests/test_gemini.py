@@ -45,3 +45,15 @@ def test_explanations_cannot_invent_fact_types():
     from app.services.gemini import Explanations
     with pytest.raises(ValidationError):
         Explanations(items=[{"product_id":"sample","reason_ids":["invented_discount"]}])
+
+
+def test_multi_intent_uses_official_structured_sdk(monkeypatch):
+    from app.models.multi_schemas import MultiIntent, ItemRequirement
+    monkeypatch.setattr(settings,'gemini_api_key','unit-test-placeholder')
+    client=MagicMock()
+    client.models.generate_content.return_value=SimpleNamespace(text=MultiIntent(total_budget=100000,items=[ItemRequirement(category='laptop'),ItemRequirement(category='monitor')]).model_dump_json())
+    context=MagicMock();context.__enter__.return_value=client
+    with patch('app.services.gemini.genai.Client',return_value=context):
+        result=GeminiService().parse_multi('Laptop and monitor under 100000')
+    assert len(result.items)==2
+    assert client.models.generate_content.call_args.kwargs['config'].response_schema is MultiIntent
