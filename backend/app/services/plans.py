@@ -2,7 +2,7 @@ from collections import Counter
 from copy import deepcopy
 from fastapi import HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, object_session
 from app.models.entities import PurchasePlan, PurchaseSession, Cart, Product, Order, AuditEvent
 from app.models.multi_schemas import MultiIntent
 from app.agents.multi_workflow import planning_graph, checkout_graph
@@ -17,8 +17,10 @@ def get_plan(db: Session, plan_id: str) -> PurchasePlan:
 
 
 def present(plan: PurchasePlan) -> dict:
+    db=object_session(plan)
+    order_ids=list(db.scalars(select(Order.id).join(Cart,Order.cart_id==Cart.id).where(Cart.plan_id==plan.id).order_by(Order.created_at.desc(),Order.id))) if db else []
     return {"id":plan.id,"session_id":plan.session_id,"parent_id":plan.parent_id,"revision":plan.revision,
-            "status":plan.status,"intent":plan.intent,"result":plan.result,"workflow":plan.workflow,"changes":plan.changes}
+            "status":plan.status,"intent":plan.intent,"result":plan.result,"workflow":plan.workflow,"changes":plan.changes,"order_ids":order_ids}
 
 
 def generate(db: Session, *, text: str = "Structured purchasing requirements", intent: MultiIntent | None = None, ai=None, parent: PurchasePlan | None = None) -> PurchasePlan:
@@ -48,7 +50,7 @@ def differences(db: Session, snapshot: dict, intent: MultiIntent, lock: bool = T
         current=row.data
         if not current.get("available") or not current.get("seller_available",True): changes.append(f"{previous['name']}: product or seller unavailable")
         if current.get("stock",1)<line["quantity"]: changes.append(f"{previous['name']}: insufficient stock")
-        for key in ["price","seller","currency","category","specifications"]:
+        for key in ["price","seller","currency","category","specifications","brand","model","name","processor_brand","processor","ram_gb","storage_gb","weight_kg","battery_hours","gpu","os"]:
             if current.get(key)!=previous.get(key): changes.append(f"{previous['name']}: {key} changed from {previous.get(key)} to {current.get(key)}")
         req=requirements.get(current.get("category"))
         if req:
@@ -116,7 +118,7 @@ def get_cart(db: Session, cart_id: str) -> Cart:
 
 
 def present_cart(cart: Cart) -> dict:
-    return {"id":cart.id,"plan_id":cart.plan_id,"version":cart.version,"status":cart.status,"snapshot":cart.snapshot}
+    return {"id":cart.id,"plan_id":cart.plan_id,"alternative_index":cart.alternative_index,"version":cart.version,"status":cart.status,"snapshot":cart.snapshot}
 
 
 def create_cart(db: Session, request) -> Cart:

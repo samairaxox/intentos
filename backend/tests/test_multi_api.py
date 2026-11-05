@@ -39,6 +39,7 @@ def test_multi_checkout_and_idempotency(client):
     plan,cart,order=plan_cart_order(client)
     path="/api/v1/orders/"+order["id"]
     assert client.post(path+"/pay",json={"idempotency_key":"bundle-pay-key"}).status_code==409
+    assert order["id"] in client.get("/api/v1/plans/"+plan["id"]).json()["order_ids"]
     details=client.get(path).json()
     assert len(details["items"])==5
     assert sum(i["unit_price"]*i["quantity"] for i in details["items"])==order["amount"]<=100000
@@ -115,3 +116,17 @@ def test_missing_and_infeasible_api(client):
     impossible=client.post('/api/v1/plans',json={'intent':intent_payload(100)})
     assert impossible.json()['status']=='INFEASIBLE'
     assert client.post('/api/v1/carts',json={'plan_id':impossible.json()['id']}).status_code==422
+
+
+def test_specification_change_invalidates_approval(client):
+    plan,cart,order=plan_cart_order(client)
+    path='/api/v1/orders/'+order['id']
+    client.post(path+'/approve',json={'approved':True})
+    laptop=next(line['product'] for line in cart['snapshot']['items'] if line['product']['category']=='laptop')
+    with client.factory() as db:
+        row=db.get(Product,laptop['id'])
+        row.data={**row.data,'ram_gb':32};db.commit()
+    response=client.post(path+'/pay',json={'idempotency_key':'changed-spec-key'})
+    assert response.status_code==409
+    assert response.json()['detail']['revised_plan_id']
+    assert client.get(path).json()['status']=='CANCELLED'

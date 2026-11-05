@@ -117,6 +117,9 @@ export default function Home() {
           ◈ <span>Purchase agent</span>
           <span className="nav-dot" />
         </div>
+        <a className="nav-link" href="/setup">
+          Multi-product setup optimizer ↗
+        </a>
         <div className="history-label">RECENT ORDERS</div>
         <div className="history">
           {history.length === 0 ? (

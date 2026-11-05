@@ -61,6 +61,14 @@ export interface AuditEvent {
   event: string;
   created_at: string;
 }
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public detail: unknown,
+  ) {
+    super(message);
+  }
+}
 const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 export async function api<T>(path: string, body?: unknown): Promise<T> {
   const response = await fetch(base + path, {
@@ -72,10 +80,11 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
     const error = await response
       .json()
       .catch(() => ({ detail: "Backend unavailable" }));
-    throw new Error(
+    throw new ApiError(
       typeof error.detail === "string"
         ? error.detail
-        : JSON.stringify(error.detail),
+        : error.detail?.message || JSON.stringify(error.detail),
+      error.detail,
     );
   }
   return response.json();

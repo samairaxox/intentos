@@ -130,6 +130,7 @@ class PlanResult(BaseModel):
     revised_plan_id: str | None = None
 
 class PlanOut(BaseModel):
+    order_ids: list[str] = Field(default_factory=list)
     id: str
     session_id: str
     parent_id: str | None
@@ -141,6 +142,7 @@ class PlanOut(BaseModel):
     changes: list[str]
 
 class CartOut(BaseModel):
+    alternative_index: int
     id: str
     plan_id: str
     version: int
