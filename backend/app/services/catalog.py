@@ -18,8 +18,13 @@ def seed(db):
     products = json.loads((Path(__file__).parents[2] / "data/laptops.json").read_text())
     products += json.loads((Path(__file__).parents[2] / "data/accessories.json").read_text())
     for product in products:
-        if not db.get(Product, product["id"]):
+        existing = db.get(Product, product["id"])
+        if not existing:
             db.add(Product(id=product["id"], data=product))
+        else:
+            # Enrich pre-Phase-2 metadata without overwriting edited prices or availability.
+            additions = {k:v for k,v in product.items() if k not in existing.data}
+            existing.data = {**additions, **existing.data}
     db.commit()
 
 if __name__ == "__main__":
