@@ -28,7 +28,8 @@ class Order(Base):
     __tablename__ = "orders"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     session_id: Mapped[str] = mapped_column(ForeignKey("purchase_sessions.id"))
-    product_id: Mapped[str] = mapped_column(ForeignKey("products.id"))
+    product_id: Mapped[str | None] = mapped_column(ForeignKey("products.id"), nullable=True)
+    cart_id: Mapped[str | None] = mapped_column(ForeignKey("carts.id"), nullable=True, unique=True)
     amount: Mapped[int] = mapped_column(Integer)
     currency: Mapped[str] = mapped_column(String(3), default="INR")
     status: Mapped[str] = mapped_column(String(32), default="PENDING_APPROVAL")
@@ -49,3 +50,36 @@ class AuditEvent(Base):
     order_id: Mapped[str] = mapped_column(ForeignKey("orders.id"))
     event: Mapped[str] = mapped_column(String(100))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class PurchasePlan(Base):
+    __tablename__ = "purchase_plans"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    session_id: Mapped[str] = mapped_column(ForeignKey("purchase_sessions.id"))
+    parent_id: Mapped[str | None] = mapped_column(ForeignKey("purchase_plans.id"), nullable=True)
+    status: Mapped[str] = mapped_column(String(32))
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    intent: Mapped[dict] = mapped_column(JSON)
+    result: Mapped[dict] = mapped_column(JSON)
+    workflow: Mapped[dict] = mapped_column(JSON)
+    changes: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+class Cart(Base):
+    __tablename__ = "carts"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    plan_id: Mapped[str] = mapped_column(ForeignKey("purchase_plans.id"))
+    alternative_index: Mapped[int] = mapped_column(Integer, default=0)
+    snapshot: Mapped[dict] = mapped_column(JSON)
+    version: Mapped[int] = mapped_column(Integer, default=1)
+    status: Mapped[str] = mapped_column(String(32), default="ACTIVE")
+
+class OrderItem(Base):
+    __tablename__ = "order_items"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    order_id: Mapped[str] = mapped_column(ForeignKey("orders.id"))
+    product_id: Mapped[str] = mapped_column(ForeignKey("products.id"))
+    quantity: Mapped[int] = mapped_column(Integer)
+    unit_price: Mapped[int] = mapped_column(Integer)
+    seller: Mapped[str] = mapped_column(String(200))
+    snapshot: Mapped[dict] = mapped_column(JSON)
