@@ -1,8 +1,10 @@
 # IntentOS
 
-A local agentic purchasing workspace that turns a natural-language laptop request into catalog recommendations and an explicitly approved **simulated** payment.
+A local agentic commerce workspace for single-product purchasing and multi-product budget optimization, with explicit approval and **simulated** payments.
 
-**Status:** Phase 1 implementation is runnable. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
+**Phase 2:** open [the setup optimizer](http://127.0.0.1:3000/setup) for complete multi-category carts. See [Phase 2 architecture, upgrade steps, APIs and limitations](docs/PHASE2.md) and the [generated evaluation results](docs/benchmarks/phase2.md). The original single-laptop interface remains at `/`.
+
+**Status:** Phase 2 is implemented with a Gemini multi-product schema, OR-Tools optimization, alternatives, persisted replanning, versioned carts and multi-item mock checkout. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
 
 ## Start on Windows PowerShell
 
@@ -45,7 +47,7 @@ $env:DATABASE_URL="sqlite:///./intentos.db"
 
 SQLite is for local development and tests. PostgreSQL is the intended database. Do not infer PostgreSQL locking or concurrency verification from passing SQLite tests.
 
-## Try the acceptance scenario
+## Try the Phase 1 acceptance scenario
 
 Enter:
 
@@ -61,7 +63,7 @@ Enter:
 
 Missing essential information or unsupported categories/currencies returns `NEEDS_DETAILS`. Correct the request and analyze again. The supported category is laptop; currency is INR. Requests are sent to Gemini for parsing, and the top three catalog records are sent for explanations. Do not include personal or financial secrets in purchase requests.
 
-## Architecture
+## Phase 1 architecture (preserved)
 
 ```mermaid
 flowchart LR
@@ -107,7 +109,9 @@ PENDING_APPROVAL / APPROVED -> CANCELLED
 - A failed payment is terminal for that order; create a new order to retry. If catalog price changes after creation, create and approve a new order.
 - **Multi-user authentication is not implemented.** This is a single-user local demo. Order IDs are not access credentials. CORS is not authentication. Do not expose these API endpoints publicly; add identity, ownership and CSRF protections before deployment.
 
-## API
+## Phase 1 and shared API
+
+See [Phase 2 API additions](docs/PHASE2.md#api-additions) for multi-product planning, optimization, carts and replanning.
 
 | Method | Path | Purpose |
 | --- | --- | --- |
@@ -137,20 +141,20 @@ npm --prefix frontend run build
 
 Actual results in this development session:
 
-- **23 pytest tests passed** with mocked Gemini and an isolated SQLite database. Covers schema validation, hard/soft constraints, budget enforcement, ranking, no matches, missing details, SDK structured-output wiring/errors, core APIs, explicit approval, unavailable/changed products, payment success/failure, duplicate attempts, cross-order key conflicts, cancellation, persisted transaction restoration and client-amount tampering.
+- **97 pytest tests passed** with mocked Gemini and an isolated SQLite database. Covers schema validation, hard/soft constraints, budget enforcement, ranking, no matches, missing details, SDK structured-output wiring/errors, core APIs, explicit approval, unavailable/changed products, payment success/failure, duplicate attempts, cross-order key conflicts, cancellation, persisted transaction restoration and client-amount tampering.
 - **TypeScript check passed.**
 - **Next.js production build passed** using webpack. Turbopack failed to spawn its CSS transformation worker on this Windows host; scripts use the supported webpack builder.
 - Alembic upgrade, seed, downgrade, upgrade and reseed succeeded with SQLite.
-- Browser check: the responsive workspace renders and the real backend's missing-Gemini-key error is shown. The full browser payment scenario has not been verified with a live Gemini key.
+- Browser check: the responsive workspace renders and the real backend's missing-Gemini-key error is shown. The multi-product browser flow also verified catalog-change replanning, fresh approval, simulated payment and saved-order restoration using explicit structured input. Live Gemini acceptance remains pending.
 - `npm install` reported zero known vulnerabilities at installation time.
 - 14 upstream Python deprecation warnings remain from LangSmith and Google SDK internals on Python 3.14.
 
 The backend dependency ranges live in `requirements.txt`; the exact tested resolution is `requirements.lock.txt`. Frontend dependencies are locked by `package-lock.json`. Re-resolve and test deliberately when upgrading.
 
-## Known limits and Phase 2
+## Known limits and next milestone
 
 Live Gemini acceptance, PostgreSQL execution and concurrent PostgreSQL payment tests still need local infrastructure. AI extraction can misunderstand ambiguous requirements; review intent and catalog facts before approval. Explanation reasons are selected by Gemini and rendered from catalog facts to prevent invented claims. Workflow progress shows completed server stages after analysis returns, not a simulated live progress animation.
 
-This MVP has synthetic laptop data, no live merchant discovery, no real payments, no multi-user authentication, no inventory reservation, no refunds or retries on failed orders, and no cross-device list of recent orders. Provider/gateway interfaces and separate optimization services leave room for real integrations, multi-product budget optimization, OR-Tools, dynamic replanning and authenticated ownership. Real payment integration would also require an outbox, reconciliation, authenticated webhooks and gateway-level idempotency.
+Phase 2 adds multi-product optimization, alternatives, cart management and dynamic replanning. The catalog remains synthetic, with no live merchant discovery, real payments, multi-user authentication or inventory reservation. See [current limitations and the next milestone](docs/PHASE2.md#remaining-issues-and-recommended-next-milestone).
 
 See [the implementation inventory](docs/IMPLEMENTATION.md) for the files created and verification boundaries.
