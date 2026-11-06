@@ -1,0 +1,542 @@
+{
+  "dataset": "IntentOS synthetic demo catalog; fixed fixture clock 2026-01-15T12:00:00Z; no live observations",
+  "cases": [
+    {
+      "budget": 75000,
+      "reserve": "10000.00",
+      "profile": "cost_focused",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "64977.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 27.07,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 75000,
+      "reserve": "10000.00",
+      "profile": "cost_focused",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "64763.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 31.276,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 75000,
+      "reserve": "10000.00",
+      "profile": "balanced",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "64977.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "64977.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 32.302,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 75000,
+      "reserve": "10000.00",
+      "profile": "balanced",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "64763.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "64763.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 51.353,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 75000,
+      "reserve": "10000.00",
+      "profile": "risk_averse",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "64977.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "63777.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 36.496,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 75000,
+      "reserve": "10000.00",
+      "profile": "risk_averse",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "64763.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "64463.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 48.577,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 100000,
+      "reserve": "10000.00",
+      "profile": "cost_focused",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 23.839,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 100000,
+      "reserve": "10000.00",
+      "profile": "cost_focused",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 35.082,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 100000,
+      "reserve": "10000.00",
+      "profile": "balanced",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 29.636,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 100000,
+      "reserve": "10000.00",
+      "profile": "balanced",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 45.574,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 100000,
+      "reserve": "10000.00",
+      "profile": "risk_averse",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 62.765,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 100000,
+      "reserve": "10000.00",
+      "profile": "risk_averse",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "88264.00",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 99.903,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 125000,
+      "reserve": "10000.00",
+      "profile": "cost_focused",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 58.422,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 125000,
+      "reserve": "10000.00",
+      "profile": "cost_focused",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 83.45,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 125000,
+      "reserve": "10000.00",
+      "profile": "balanced",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 68.606,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 125000,
+      "reserve": "10000.00",
+      "profile": "balanced",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 108.567,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 125000,
+      "reserve": "10000.00",
+      "profile": "risk_averse",
+      "categories": 2,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "56577.50",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "76077.50",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 73.807,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    },
+    {
+      "budget": 125000,
+      "reserve": "10000.00",
+      "profile": "risk_averse",
+      "categories": 5,
+      "comparisons": [
+        {
+          "strategy": "immediate",
+          "status": "READY",
+          "simulated_total": "88163.75",
+          "compliant": true
+        },
+        {
+          "strategy": "lowest_price",
+          "status": "READY",
+          "simulated_total": "59663.75",
+          "compliant": true
+        },
+        {
+          "strategy": "optimized",
+          "status": "READY",
+          "simulated_total": "88264.00",
+          "compliant": true
+        }
+      ],
+      "comparison_runtime_ms": 103.285,
+      "consistent_repeat": true,
+      "price_increase_replan_feasible": true
+    }
+  ],
+  "summary": {
+    "cases": 18,
+    "strategy_comparisons": 54,
+    "feasible_comparisons": 54,
+    "hard_constraint_violations": 0,
+    "consistent_repeats": 18,
+    "price_increase_replans_feasible": 18,
+    "mean_comparison_runtime_ms": 56.667
+  },
+  "limitations": [
+    "Costs are simulated, not real-world savings.",
+    "Runtime covers three strategy solves and assessment, and varies by machine.",
+    "Immediate baseline maximizes existing utility; lowest-price baseline minimizes landed cost under identical hard constraints.",
+    "Consistency uses a fixed catalog and clock. Replan feasibility is measured for a hypothetical 10% laptop base-price increase."
+  ]
+}
