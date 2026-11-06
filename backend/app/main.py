@@ -2,6 +2,8 @@ import json
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import OperationalError,DBAPIError
 from app.api.routes import router
 from app.api.commerce_routes import router as commerce_router
 from app.api.multi_routes import router as multi_router
@@ -20,6 +22,14 @@ app.include_router(commerce_router)
 app.include_router(multi_router)
 from app.api.finance_routes import router as finance_router
 app.include_router(finance_router)
+
+@app.exception_handler(DBAPIError)
+async def database_error(request,exc):
+    unavailable=isinstance(exc,OperationalError) or exc.connection_invalidated
+    logging.getLogger(__name__).error('database_request_failed: %s',type(exc).__name__)
+    return JSONResponse(status_code=503 if unavailable else 500,content={'detail':{
+        'code':'DATABASE_UNAVAILABLE' if unavailable else 'DATABASE_ERROR',
+        'message':'Database temporarily unavailable. Inspect transaction state before retrying financial writes.' if unavailable else 'Database operation failed.'}})
 
 @app.get("/health")
 def health() -> dict:

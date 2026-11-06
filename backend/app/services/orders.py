@@ -6,9 +6,18 @@ from app.models.schemas import Intent
 from app.services.optimization import eligible
 from app.core.config import settings
 from app.services.payments import MockPaymentGateway
+from app.services.approval import legacy_terms,fingerprint
+
+
+def single_session(db,session_id):
+    session=db.get(PurchaseSession,session_id)
+    if not session or session.result.get('kind') in ['multi','commerce','financial']:
+        raise HTTPException(404,'Single-product purchase session not found')
+    if 'intent' not in session.result:raise HTTPException(404,'Single-product purchase session not found')
+    return session
 
 def get_order(db, order_id):
-    order = db.get(Order, order_id)
+    order = db.scalar(select(Order).where(Order.id==order_id).with_for_update().execution_options(populate_existing=True))
     if not order: raise HTTPException(404, "Order not found")
     return order
 
@@ -16,14 +25,18 @@ def event(db, order, name):
     db.add(AuditEvent(order_id=order.id, event=name))
 
 def verify(db, order):
-    if order.cart_id:
-        from app.services.bundle_checkout import verify_bundle
-        return verify_bundle(db,order)
     try:
-        return verify_single(db,order)
+        if order.cart_id:
+            from app.services.bundle_checkout import verify_bundle
+            verify_bundle(db,order)
+        else: verify_single(db,order)
+        if order.purchase_terms and fingerprint(order.purchase_terms)!=fingerprint(legacy_terms(db,order)):
+            raise HTTPException(409,"Purchase terms changed; create a new order and approve again")
+        if order.status=="APPROVED" and (not order.authorization_digest or order.authorization_digest!=fingerprint(order.purchase_terms)):
+            raise HTTPException(409,"Fresh approval for these exact purchase terms is required")
     except HTTPException:
         if order.id and order.status in ["PENDING_APPROVAL", "APPROVED"]:
-            order.status="CANCELLED"
+            order.status="CANCELLED";order.authorization_digest=None
             event(db,order,"APPROVAL_INVALIDATED")
             event(db,order,"CANCELLED")
             db.commit()
@@ -44,14 +57,14 @@ def create_order(db, request):
         if existing.session_id != request.session_id or existing.product_id != request.product_id:
             raise HTTPException(409, "Idempotency key reused for a different order")
         return existing
-    session = db.get(PurchaseSession, request.session_id)
-    if not session: raise HTTPException(404, "Purchase session not found")
+    session = single_session(db,request.session_id)
     if request.product_id not in [r["product"]["id"] for r in session.result.get("recommendations",[])]:
         raise HTTPException(422, "Select an eligible recommendation from this session")
     product = db.get(Product, request.product_id)
     if not product: raise HTTPException(404, "Product not found")
     order = Order(session_id=session.id, product_id=product.id, amount=product.data["price"], idempotency_key=request.idempotency_key)
     verify(db, order)
+    order.purchase_terms=legacy_terms(db,order)
     try:
         db.add(order); db.flush()
         event(db, order, "PENDING_APPROVAL")
@@ -67,7 +80,8 @@ def approve(db, order_id):
         verify(db,order)
         return order
     verify(db,order)
-    changed = db.execute(update(Order).where(Order.id==order_id, Order.status=="PENDING_APPROVAL").values(status="APPROVED"))
+    if not order.purchase_terms:raise HTTPException(409,"Legacy order has no immutable terms; create a fresh order")
+    changed = db.execute(update(Order).where(Order.id==order_id, Order.status=="PENDING_APPROVAL").values(status="APPROVED",authorization_digest=fingerprint(order.purchase_terms)))
     if changed.rowcount != 1:
         db.rollback(); raise HTTPException(409,"Order cannot be approved in its current state")
     event(db,order,"APPROVED"); db.commit(); db.refresh(order)

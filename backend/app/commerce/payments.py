@@ -12,6 +12,7 @@ from app.commerce.schemas import utc,aware
 from app.commerce.payment_providers import MockPaymentProvider
 from app.commerce.tracing import TraceRecorder
 from app.commerce import sessions
+from app.services.approval import fingerprint,commerce_terms
 
 
 def digest(snapshot):return hashlib.sha256(json.dumps(snapshot,sort_keys=True,separators=(',',':')).encode()).hexdigest()
@@ -64,7 +65,7 @@ class PaymentAuthorizationService:
         if purchase.status!='PENDING_APPROVAL':raise HTTPException(409,'Purchase cannot be approved in its current state')
         sessions.ensure_current(db,plan,purchase.snapshot,ai)
         self.verify_amounts(db,purchase)
-        purchase.approved_at=utc();purchase.authorization_digest=digest(purchase.snapshot);purchase.status='APPROVED'
+        purchase.approved_at=utc();purchase.authorization_digest=fingerprint(commerce_terms(db,purchase,plan,suborders(db,purchase)));purchase.status='APPROVED'
         for sub in suborders(db,purchase):sub.status='AUTHORIZED';intent_for(db,sub).status='AUTHORIZED'
         TraceRecorder(db,plan.id,plan.session_id).record('approval','APPROVED',{'purchase_id':purchase.id})
         db.commit();return purchase
@@ -79,7 +80,11 @@ class PaymentAuthorizationService:
             if expected!=sub.amount or not intent or intent.amount!=sub.amount or intent.currency!='INR':raise HTTPException(409,'Server-side merchant amount mismatch')
 
     def verify(self,db,purchase):
-        if not purchase.approved_at or purchase.authorization_digest!=digest(purchase.snapshot):raise HTTPException(409,'Explicit authorization for these exact terms is required')
+        plan=db.get(CommercePlan,purchase.plan_id)
+        if not purchase.approved_at or purchase.authorization_digest!=fingerprint(commerce_terms(db,purchase,plan,suborders(db,purchase))):
+            if purchase.status=='APPROVED':
+                sessions.invalidate(db,plan,['Approved suborder terms changed']);db.commit()
+            raise HTTPException(409,'Explicit authorization for these exact terms is required')
         self.verify_amounts(db,purchase)
 
 

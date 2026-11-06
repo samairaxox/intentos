@@ -12,7 +12,6 @@ from app.services.optimization import eligible
 from app.services.catalog import LocalCatalogProvider
 
 
-@pytest.mark.xfail(strict=True, reason='AUD-002: Phase 1 does not bind seller/specification terms to approval')
 def test_approved_single_order_rejects_changed_seller(client):
     order,_=make_order(client,'audit-seller-order')
     path='/api/v1/orders/'+order['id']
@@ -24,7 +23,6 @@ def test_approved_single_order_rejects_changed_seller(client):
     assert response.status_code==409, f'Expected reapproval; observed {response.status_code}: {response.text}'
 
 
-@pytest.mark.xfail(strict=True, reason='AUD-003: Phase 1 session reader does not reject other session kinds')
 def test_cross_phase_session_read_is_a_client_error(client):
     result=client.post('/api/v1/commerce/sessions',json={'intent':{'total_budget':75000,'items':[{'category':'laptop'}]}})
     assert result.status_code==201
@@ -33,7 +31,6 @@ def test_cross_phase_session_read_is_a_client_error(client):
     assert response.status_code in [404,422], f'Observed {response.status_code}: {response.text}'
 
 
-@pytest.mark.xfail(strict=True, reason='AUD-004: database outage is an unhandled HTTP 500, not a controlled 503')
 def test_database_outage_has_controlled_service_response(client,tmp_path):
     engine=create_engine(f"sqlite:///{tmp_path / 'missing-directory' / 'unavailable.db'}")
     def broken_database():

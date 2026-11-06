@@ -30,6 +30,8 @@ class Order(Base):
     session_id: Mapped[str] = mapped_column(ForeignKey("purchase_sessions.id"))
     product_id: Mapped[str | None] = mapped_column(ForeignKey("products.id"), nullable=True)
     cart_id: Mapped[str | None] = mapped_column(ForeignKey("carts.id"), nullable=True, unique=True)
+    purchase_terms: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    authorization_digest: Mapped[str | None] = mapped_column(String(64), nullable=True)
     amount: Mapped[int] = mapped_column(Integer)
     currency: Mapped[str] = mapped_column(String(3), default="INR")
     status: Mapped[str] = mapped_column(String(32), default="PENDING_APPROVAL")

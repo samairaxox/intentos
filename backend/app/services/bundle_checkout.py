@@ -35,6 +35,8 @@ def create_bundle_order(db, request):
         raise HTTPException(409,"Invalid cart totals")
     order=Order(session_id=plan.session_id,product_id=None,cart_id=cart.id,amount=amount,currency=plan.intent["currency"],idempotency_key=request.idempotency_key)
     try:
+        from app.services.approval import legacy_terms
+        order.purchase_terms=legacy_terms(db,order)
         db.add(order);db.flush()
         for line in cart.snapshot["items"]:
             product=line["product"]

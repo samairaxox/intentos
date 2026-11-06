@@ -35,8 +35,7 @@ def analyze(request: AnalyzeRequest, db: Session = Depends(get_db), ai = Depends
 
 @router.get("/purchases/{session_id}", response_model=PurchaseOut)
 def purchase(session_id: str, db: Session = Depends(get_db)) -> dict:
-    session = db.get(PurchaseSession,session_id)
-    if not session: raise HTTPException(404,"Purchase session not found")
+    session = orders.single_session(db,session_id)
     return {"id":session.id,**session.result}
 
 @router.post("/orders", response_model=OrderOut, status_code=201)
