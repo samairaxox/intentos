@@ -31,6 +31,8 @@ def discover_and_persist(db,categories):
         if not db.get(ProductOffer,offer.id):
             db.add(ProductOffer(id=offer.id,product_id=offer.product_id,merchant_id=offer.merchant_id,data=offer.model_dump(mode="json")))
     db.flush()
+    from app.finance.history import record
+    for offer in result.offers: record(db,offer)
     return result
 
 

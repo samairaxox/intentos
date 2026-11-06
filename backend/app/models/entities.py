@@ -86,3 +86,5 @@ class OrderItem(Base):
 
 # Register additive commerce tables with the shared metadata.
 from app.models import commerce as _commerce
+
+from app.models import finance as _finance
