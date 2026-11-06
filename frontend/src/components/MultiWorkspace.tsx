@@ -98,9 +98,7 @@ export default function MultiWorkspace() {
       );
       const savedId = next.order_ids?.[0] || saved[next.id];
       if (typeof savedId === "string") {
-        const restored = await api<BundleOrder>(
-          `/api/v1/orders/${savedId}`,
-        );
+        const restored = await api<BundleOrder>(`/api/v1/orders/${savedId}`);
         await refreshOrder(restored.id);
         if (restored.cart_id) {
           const restoredCart = await api<Cart>(
@@ -265,6 +263,9 @@ export default function MultiWorkspace() {
         </a>
         <a className="nav-active" href="/setup">
           ◈ <span>Setup optimizer</span>
+        </a>
+        <a className="nav-link" href="/commerce">
+          Commerce offers & payment orchestration ↗
         </a>
         <div className="history-label">RECENT PLANS</div>
         <div className="history">
@@ -792,9 +793,23 @@ export default function MultiWorkspace() {
                   >
                     Refresh order status
                   </button>
-                  {["PAYMENT_FAILED", "CANCELLED", "PAID"].includes(order.status) && !invalid && (
-                    <button className="secondary cancel" disabled={!!busy} onClick={() => { setCart(null); setOrder(null); setEvents([]); setApproved(false); }}>Prepare a new cart</button>
-                  )}
+                  {["PAYMENT_FAILED", "CANCELLED", "PAID"].includes(
+                    order.status,
+                  ) &&
+                    !invalid && (
+                      <button
+                        className="secondary cancel"
+                        disabled={!!busy}
+                        onClick={() => {
+                          setCart(null);
+                          setOrder(null);
+                          setEvents([]);
+                          setApproved(false);
+                        }}
+                      >
+                        Prepare a new cart
+                      </button>
+                    )}
                 </section>
               )}
               <section className="replan-controls">
