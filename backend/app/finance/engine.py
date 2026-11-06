@@ -50,11 +50,11 @@ def waiting(goal, combo, histories, at, days=None):
         'history_mode':goal.history_mode,'explanation':'Conditional only: assumes the user target, or each selected offer historical minimum, becomes simultaneously available. This may never occur. Recheck stock, quotes and approval before purchase. Synthetic history is illustrative.'}
 
 
-def evaluate(goal, products, offers, histories, at=None, hypothetical=False):
+def evaluate(goal, products, offers, histories, at=None, hypothetical=False, committed=Decimal(0), committed_categories=None):
     at=at or utc()
     start=perf_counter()
     reserve={'available':cash(goal.total_budget or 0),'mandatory_reserve':cash(goal.mandatory_reserve),'spendable':cash(goal.spendable),
-        'category_limits':{k:cash(v) for k,v in goal.category_limits.items()}}
+        'category_limits':{k:cash(v) for k,v in goal.category_limits.items()},'encumbered':cash(committed),'new_purchase_capacity':cash(max(Decimal(0),goal.spendable-committed))}
     result={'reserve':reserve,'hypothetical':hypothetical,'strategies':[],'recommended':None,'history_mode':goal.history_mode,
         'assumptions':['Only current eligible landed unit prices are executable.','Reserve and category limits are hard constraints.',
         'Risk indices are documented policy penalties, not probabilities.','No verified delivery data or seller reputation is available.',
@@ -63,7 +63,7 @@ def evaluate(goal, products, offers, histories, at=None, hypothetical=False):
         'missing_information':goal.missing()}
     if goal.missing(): return {**result,'status':'NEEDS_DETAILS'}
     scores={o.id:offer_risk(o,histories.get(o.id,{}),at) for o in offers}
-    common={'limit':1,'budget_minor':int(goal.spendable*100),'category_limits_minor':{k:int(v*100) for k,v in goal.category_limits.items()},
+    common={'limit':1,'budget_minor':max(0,int((goal.spendable-committed)*100)),'category_limits_minor':{k:max(0,int((v-(committed_categories or {}).get(k,Decimal(0)))*100)) for k,v in goal.category_limits.items()},
         'risk_scores':{k:v['index'] for k,v in scores.items()},'as_of':at}
     intent=goal.commerce_intent()
     for code,profile in [('immediate','utility'),('lowest_price','cost_focused'),('optimized',goal.risk_strategy)]:

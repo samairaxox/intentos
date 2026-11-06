@@ -51,8 +51,10 @@ def run(db,decision,ai):
         return {'histories':{o['id']:history(db,o['id'],s['goal']['history_mode']) for o in s['offers']}}
     def strategies(s): return {'profiles':['immediate','lowest_price','optimized','essentials_now','wait']}
     def optimize(s):
+        from app.finance.service import commitments
+        committed,categories=commitments(db,decision.session_id)
         result=evaluate(FinancialGoal.model_validate(s['goal']),[CanonicalProduct.model_validate(p) for p in s['products']],
-            [MerchantOffer.model_validate(o) for o in s['offers']],s['histories'],datetime.fromisoformat(s['at']))
+            [MerchantOffer.model_validate(o) for o in s['offers']],s['histories'],datetime.fromisoformat(s['at']),committed=committed,committed_categories=categories)
         return {'result':result}
     def risks(s):
         return {'result':{**s['result'],'risk_assessments':{a['code']:a.get('risk') for a in s['result']['strategies']}}}

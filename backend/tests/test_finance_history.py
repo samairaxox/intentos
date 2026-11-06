@@ -28,3 +28,5 @@ def test_synthetic_history_separate_and_reproducible(db):
     assert result['minimum']==format(min(r.price for r in rows),'.2f')
     assert Decimal(result['volatility_percent'])>0
     assert all(p['verification']=='synthetic_unverified' for p in result['points'])
+    changed=offer.model_copy(update={'base_price':offer.base_price+Decimal('100')})
+    assert seed_synthetic(db,[changed])==0  # fixture v1 is immutable even when current quotes change

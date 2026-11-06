@@ -12,7 +12,8 @@ def record(db, offer, *, synthetic_day=None, factor=Decimal(1)):
     kind = 'synthetic' if synthetic_day is not None else ('recorded_live' if offer.source_type == 'live_verified' else 'recorded_demo')
     price = (Decimal(TotalCostService().calculate(offer)['final_price']) * factor).quantize(Decimal('.01'))
     # Re-reading the same quote must not manufacture independent market observations.
-    key = hashlib.sha256(f'{kind}:{offer.id}:{synthetic_day if synthetic_day is not None else offer.retrieved_at.isoformat()}:{price}'.encode()).hexdigest()
+    identity=f'synthetic_fixture_v1:{offer.id}:{synthetic_day}' if synthetic_day is not None else f'{kind}:{offer.id}:{offer.retrieved_at.isoformat()}:{price}'
+    key = hashlib.sha256(identity.encode()).hexdigest()
     if db.scalar(select(PriceObservation.id).where(PriceObservation.quote_key == key)):
         return False
     db.add(PriceObservation(quote_key=key, product_id=offer.product_id, merchant_id=offer.merchant_id,

@@ -72,7 +72,7 @@ def optimize_offers(intent: CommerceIntent,products: list[CanonicalProduct],offe
     combinations=[]
     for _ in range(min(3,limit)):
         if objective_profile=="cost_focused":
-            model.maximize(-cost*(2*sum(abs(b) for b in benefits)+1)+utility)
+            model.minimize(cost)
         else:
             penalty=10000 if objective_profile=="risk_averse" else 1000 if objective_profile=="balanced" else 0
             model.maximize(utility*(budget+1)-cost-concentration*penalty)

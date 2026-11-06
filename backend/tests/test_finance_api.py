@@ -39,9 +39,14 @@ def test_checkpoint_resume_reserve_and_explicit_approval(client):
     with client.factory() as db: assert not list(db.scalars(select(PaymentAttempt)))
     assert client.post(path+'/approve',json={'approved':True}).status_code==200
     assert client.post(path+'/execute',json={'idempotency_key':'finance-execute-001'}).json()['status']=='PAID'
+    restored=client.get('/api/v1/finance/decisions/'+d['id']).json()
+    assert p['id'] in restored['purchase_ids']
     # A second charge cannot spend the envelope a second time.
     another=client.post(f"/api/v1/finance/decisions/{d['id']}/select",json={'strategy':'optimized','idempotency_key':'financial-purchase-002'})
     assert another.status_code==409
+    replanned=client.post(f"/api/v1/finance/decisions/{d['id']}/replan").json()
+    assert replanned['result']['reserve']['encumbered']==p['amount']
+    assert replanned['result']['status']=='NO_MATCH'
 
 
 def test_budget_revision_invalidates_approval_and_blocks_commerce_bypass(client):

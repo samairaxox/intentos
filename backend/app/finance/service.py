@@ -38,6 +38,7 @@ def present(db,row):
     return {'id':row.id,'session_id':row.session_id,'parent_id':row.parent_id,'status':row.status,'goal':row.goal,
         'result':row.result,'workflow':{'completed':row.workflow.get('completed',[])},
         'histories':row.workflow.get('histories',{}),'latest_decision_id':root.result.get('latest_decision_id'),
+        'purchase_ids':list(db.scalars(select(CommercePurchase.id).join(CommercePlan).where(CommercePlan.session_id==row.session_id).order_by(CommercePurchase.created_at.desc()))),
         'scenarios':[{'id':s.id,'parameters':s.parameters,'result':s.result} for s in db.scalars(select(ScenarioSimulation).where(ScenarioSimulation.decision_id==row.id))]}
 
 
@@ -78,15 +79,27 @@ def policy_check(db,plan,snapshot,*,purchase_id=None,exposure=False):
         if sum(Decimal(l['line_total']) for l in snapshot['items'] if l['product']['category']==category)>cap:
             raise HTTPException(409,'Category spending limit exceeded')
     if exposure:
-        # Captures, unknown outcomes and refund-pending money remain encumbered.
-        others=list(db.scalars(select(CommercePurchase).join(CommercePlan).where(CommercePlan.session_id==plan.session_id)))
-        committed=Decimal(0)
-        for purchase in others:
-            if purchase.id==purchase_id: continue
-            for sub in db.scalars(select(MerchantSuborder).where(MerchantSuborder.purchase_id==purchase.id)):
-                if sub.status in ['CAPTURED','REFUND_PENDING','UNKNOWN','PROCESSING','AUTHORIZED','PENDING_APPROVAL']:
-                    committed+=sub.amount
+        committed,categories=commitments(db,plan.session_id,exclude_purchase_id=purchase_id)
         if total+committed>goal.spendable: raise HTTPException(409,'Existing financial commitments leave insufficient spendable budget')
+        for category,cap in goal.category_limits.items():
+            allocated=sum(Decimal(l['line_total']) for l in snapshot['items'] if l['product']['category']==category)
+            if allocated+categories.get(category,Decimal(0))>cap: raise HTTPException(409,'Existing commitments exceed category spending capacity')
+
+
+def commitments(db,session_id,exclude_purchase_id=None):
+    # Captures, unknown outcomes and refund-pending money remain encumbered.
+    purchases=list(db.scalars(select(CommercePurchase).join(CommercePlan).where(CommercePlan.session_id==session_id)))
+    total=Decimal(0);categories={}
+    for purchase in purchases:
+        if purchase.id==exclude_purchase_id: continue
+        for sub in db.scalars(select(MerchantSuborder).where(MerchantSuborder.purchase_id==purchase.id)):
+            if sub.status in ['CAPTURED','REFUND_PENDING','UNKNOWN','PROCESSING','AUTHORIZED','PENDING_APPROVAL']:
+                total+=sub.amount
+                for line in sub.items:
+                    category=line['product']['category']
+                    categories[category]=categories.get(category,Decimal(0))+Decimal(line['line_total'])
+    return total,categories
+
 
 
 def select_strategy(db,decision,request,ai):

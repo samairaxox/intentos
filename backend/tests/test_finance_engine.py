@@ -66,3 +66,27 @@ def test_deadline_and_explicit_essential_staging(db):
     staged=next(s for s in result['strategies'] if s['code']=='essentials_now')
     assert staged['deferred_categories']==['headphones']
     assert all(l['product']['category']=='laptop' for l in staged['plan']['items'])
+
+
+def test_exact_hypothetical_price_change_and_conditional_wait():
+    at=utc()
+    product=CanonicalProduct(id='p',category='laptop',brand='X',model='X',name='Fixture',specifications={},performance=80,quality_score=80)
+    offer=MerchantOffer(id='o',product_id='p',merchant_id='m',merchant_name='Fixture',base_price='80.00',shipping='5.00',stock=10,source_type='demo',verification_status='demo',retrieved_at=at,provider_id='fixture')
+    g=goal(total_budget='110.00',mandatory_reserve='10.00',items=[{'category':'laptop'}],patience_days=14,opportunity_cost_per_day='0.10',history_mode='synthetic_demo')
+    histories={'o':{'evidence':'HISTORICAL_ONLY','minimum':'75.00','volatility_percent':'2.00'}}
+    result=evaluate(g,[product],[offer],histories,at)
+    assert result['wait']['target_total']=='75.00'
+    assert result['wait']['opportunity_cost']=='1.40'
+    assert result['wait']['conditional_net_difference']=='8.60'
+    assert not result['wait']['executable'] and result['wait']['forecast'] is None
+    scenario=simulate(g,[product],[offer],histories,ScenarioSpec(category_price_change_percent={'laptop':'10'}),at)
+    assert scenario['strategies'][2]['plan']['total']=='93.00'  # only base price rises; shipping stays 5
+    assert offer.base_price==Decimal('80.00')
+
+
+def test_entire_budget_reserved_and_category_removed(db):
+    found=discover_and_persist(db,['laptop','headphones'])
+    assert evaluate(goal(mandatory_reserve='100000.00'),found.products,found.offers,{})['status']=='NO_MATCH'
+    g=goal(items=[{'category':'laptop'},{'category':'headphones'}])
+    result=simulate(g,found.products,found.offers,{},ScenarioSpec(remove_categories=['headphones']))
+    assert all(l['product']['category']=='laptop' for l in result['strategies'][2]['plan']['items'])
