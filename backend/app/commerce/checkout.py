@@ -21,6 +21,7 @@ def create_purchase(db,request,ai):
     choices=plan.result.get('combinations',[])
     if request.alternative_index>=len(choices):raise HTTPException(422,'Unknown purchase alternative')
     snapshot=choices[request.alternative_index]
+    if not snapshot.get('items'):raise HTTPException(422,'Select at least one product before preparing checkout')
     sessions.ensure_current(db,plan,snapshot,ai)
     active=db.scalars(select(CommercePurchase).join(CommercePlan,CommercePurchase.plan_id==CommercePlan.id).where(CommercePlan.session_id==context.id,CommercePurchase.status.in_(['EXECUTING','PAYMENT_UNKNOWN','PARTIAL_FAILURE','COMPENSATION_PENDING'])))
     if list(active):raise HTTPException(409,'Reconcile or compensate the previous partial/unknown purchase before creating replacement orders')

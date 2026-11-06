@@ -123,6 +123,9 @@ export default function Home() {
         <a className="nav-link" href="/commerce">
           Commerce offers & payment orchestration ↗
         </a>
+        <a className="nav-link" href="/finance">
+          Financial decisions
+        </a>
         <div className="history-label">RECENT ORDERS</div>
         <div className="history">
           {history.length === 0 ? (

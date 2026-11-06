@@ -267,6 +267,9 @@ export default function MultiWorkspace() {
         <a className="nav-link" href="/commerce">
           Commerce offers & payment orchestration ↗
         </a>
+        <a className="nav-link" href="/finance">
+          Financial decisions
+        </a>
         <div className="history-label">RECENT PLANS</div>
         <div className="history">
           {history.length === 0 ? (

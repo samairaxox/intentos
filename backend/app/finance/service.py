@@ -35,8 +35,10 @@ def assert_latest(db,decision):
 
 def present(db,row):
     root=db.get(PurchaseSession,row.session_id)
-    return {'id':row.id,'session_id':row.session_id,'parent_id':row.parent_id,'status':row.status,'goal':row.goal,
-        'result':row.result,'workflow':{'completed':row.workflow.get('completed',[])},
+    return {'id':row.id,'session_id':row.session_id,'parent_id':row.parent_id,'status':row.status,'goal':row.goal or None,
+        'result':{'status':row.status,'hypothetical':False,'recommended':None,'strategies':[],
+            'explanation':'Decision is incomplete. Resume the workflow or submit an explicit revised goal.',
+            'assumptions':[],'change_triggers':[],**row.result},'workflow':{'completed':row.workflow.get('completed',[])},
         'histories':row.workflow.get('histories',{}),'latest_decision_id':root.result.get('latest_decision_id'),
         'purchase_ids':list(db.scalars(select(CommercePurchase.id).join(CommercePlan).where(CommercePlan.session_id==row.session_id).order_by(CommercePurchase.created_at.desc()))),
         'scenarios':[{'id':s.id,'parameters':s.parameters,'result':s.result} for s in db.scalars(select(ScenarioSimulation).where(ScenarioSimulation.decision_id==row.id))]}

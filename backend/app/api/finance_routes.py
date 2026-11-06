@@ -45,6 +45,7 @@ def revise(decision_id:str,request:DecisionUpdate,db:Session=Depends(get_db),ai=
 def replan(decision_id:str,db:Session=Depends(get_db),ai=Depends(get_financial_ai)):
     from app.finance.schemas import FinancialGoal
     old=service.decision_for(db,decision_id)
+    if not old.goal:raise HTTPException(422,"No parsed goal; resume or submit a revised goal")
     return service.present(db,invoke(service.revise,db,old,FinancialGoal.model_validate(old.goal),ai))
 
 

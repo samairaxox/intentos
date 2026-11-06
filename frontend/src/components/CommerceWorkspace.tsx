@@ -306,6 +306,9 @@ export default function CommerceWorkspace() {
         <a className="nav-active" href="/commerce">
           ◈ Commerce intelligence
         </a>
+        <a className="nav-link" href="/finance">
+          Financial decisions
+        </a>
         <div className="history-label">COMMERCE SESSIONS</div>
         <div className="history">
           {history.length ? (

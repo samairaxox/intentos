@@ -97,6 +97,10 @@ def test_ai_interruption_resumes_and_uses_validated_goal(client):
     response=client.post('/api/v1/finance/decisions',json={'text':'Coding setup under one lakh, reserve ten thousand'})
     assert response.status_code==503 and response.json()['detail']['decision_id']
     did=response.json()['detail']['decision_id']
+    restored=client.get(f'/api/v1/finance/decisions/{did}').json()
+    assert restored['goal'] is None and restored['result']['strategies']==[]
+    assert restored['status']=='INTERRUPTED'
+    assert client.post(f'/api/v1/finance/decisions/{did}/replan').status_code==422
     class FixtureAI:
         def parse(self,text):return FinancialGoal.model_validate(goal())
         def explain(self,strategies):return strategies
@@ -104,3 +108,12 @@ def test_ai_interruption_resumes_and_uses_validated_goal(client):
     resumed=client.post(f'/api/v1/finance/decisions/{did}/resume')
     assert resumed.status_code==200,resumed.text
     assert resumed.json()['status']=='AWAITING_DECISION'
+
+
+def test_optional_only_goal_requires_clarification_before_payment(client):
+    d=decision(client,risk_strategy='cost_focused',items=[{'category':'headphones','required':False}])
+    assert d['result']['strategies']==[]
+    assert 'at least one required category' in d['result']['missing_information']
+    selected=client.post(f"/api/v1/finance/decisions/{d['id']}/select",json={'strategy':'optimized','idempotency_key':'empty-optional-key'})
+    assert selected.status_code==409
+    with client.factory() as db:assert not list(db.scalars(select(CommercePurchase)))

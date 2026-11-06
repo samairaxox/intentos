@@ -69,6 +69,7 @@ def evaluate(goal, products, offers, histories, at=None, hypothetical=False, com
     for code,profile in [('immediate','utility'),('lowest_price','cost_focused'),('optimized',goal.risk_strategy)]:
         solved=optimize_offers(intent,products,offers,objective_profile=profile,**common)
         combo=next(iter(solved['combinations']),None)
+        if combo and not combo['items']: combo=None
         strategy={'code':code,'profile':profile,'status':solved['status'],'executable':bool(combo) and not hypothetical,'plan':combo}
         if combo: strategy['risk']=basket_risk(combo,scores,goal.spendable)
         result['strategies'].append(strategy)
@@ -77,6 +78,7 @@ def evaluate(goal, products, offers, histories, at=None, hypothetical=False, com
         essentials=intent.model_copy(update={'items':[r for r in intent.items if r.required]})
         solved=optimize_offers(essentials,products,offers,objective_profile=goal.risk_strategy,**common)
         combo=next(iter(solved['combinations']),None)
+        if combo and not combo['items']: combo=None
         result['strategies'].append({'code':'essentials_now','status':solved['status'],'executable':bool(combo) and not hypothetical,'plan':combo,
             'deferred_categories':[r.category for r in goal.items if not r.required],
             'explanation':'Buy only explicitly required items now. Optional items remain unpurchased and need a later decision and approval.',
