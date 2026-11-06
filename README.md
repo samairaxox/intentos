@@ -2,9 +2,11 @@
 
 A local agentic commerce workspace for single-product purchasing and multi-product budget optimization, with explicit approval and **simulated** payments.
 
+**Phase 3:** [Commerce intelligence workspace](http://127.0.0.1:3000/commerce) adds normalized merchant offers, Decimal landed costs, session memory, persistent traces and reconciliation-aware multi-merchant mock execution. See [Phase 3 setup, APIs, migrations and limitations](docs/PHASE3.md). Live merchant and sandbox payment adapters are explicitly pending; no real money is processed.
+
 **Phase 2:** open [the setup optimizer](http://127.0.0.1:3000/setup) for complete multi-category carts. See [Phase 2 architecture, upgrade steps, APIs and limitations](docs/PHASE2.md) and the [generated evaluation results](docs/benchmarks/phase2.md). The original single-laptop interface remains at `/`.
 
-**Status:** Phase 2 is implemented with a Gemini multi-product schema, OR-Tools optimization, alternatives, persisted replanning, versioned carts and multi-item mock checkout. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
+**Status:** Phase 3 extends the verified Phase 1/2 application with merchant offers and safe mock orchestration. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
 
 ## Start on Windows PowerShell
 
@@ -111,6 +113,8 @@ PENDING_APPROVAL / APPROVED -> CANCELLED
 
 ## Phase 1 and shared API
 
+See [Phase 3 API additions](docs/PHASE3.md#api-additions) for offers, session memory, merchant suborders, reconciliation and traces.
+
 See [Phase 2 API additions](docs/PHASE2.md#api-additions) for multi-product planning, optimization, carts and replanning.
 
 | Method | Path | Purpose |
@@ -141,7 +145,7 @@ npm --prefix frontend run build
 
 Actual results in this development session:
 
-- **97 pytest tests passed** with mocked Gemini and an isolated SQLite database. Covers schema validation, hard/soft constraints, budget enforcement, ranking, no matches, missing details, SDK structured-output wiring/errors, core APIs, explicit approval, unavailable/changed products, payment success/failure, duplicate attempts, cross-order key conflicts, cancellation, persisted transaction restoration and client-amount tampering.
+- **141 pytest tests passed**, including the preserved Phase 1/2 suite. See the [Phase 3 validation record](docs/validation/phase3.json). with mocked Gemini and an isolated SQLite database. Covers schema validation, hard/soft constraints, budget enforcement, ranking, no matches, missing details, SDK structured-output wiring/errors, core APIs, explicit approval, unavailable/changed products, payment success/failure, duplicate attempts, cross-order key conflicts, cancellation, persisted transaction restoration and client-amount tampering.
 - **TypeScript check passed.**
 - **Next.js production build passed** using webpack. Turbopack failed to spawn its CSS transformation worker on this Windows host; scripts use the supported webpack builder.
 - Alembic upgrade, seed, downgrade, upgrade and reseed succeeded with SQLite.
@@ -155,6 +159,6 @@ The backend dependency ranges live in `requirements.txt`; the exact tested resol
 
 Live Gemini acceptance, PostgreSQL execution and concurrent PostgreSQL payment tests still need local infrastructure. AI extraction can misunderstand ambiguous requirements; review intent and catalog facts before approval. Explanation reasons are selected by Gemini and rendered from catalog facts to prevent invented claims. Workflow progress shows completed server stages after analysis returns, not a simulated live progress animation.
 
-Phase 2 adds multi-product optimization, alternatives, cart management and dynamic replanning. The catalog remains synthetic, with no live merchant discovery, real payments, multi-user authentication or inventory reservation. See [current limitations and the next milestone](docs/PHASE2.md#remaining-issues-and-recommended-next-milestone).
+Phase 2 adds multi-product optimization, alternatives, cart management and dynamic replanning. The catalog remains synthetic, with no live merchant discovery, real payments, multi-user authentication or inventory reservation. See [current Phase 3 limitations and the Phase 4 recommendation](docs/PHASE3.md#remaining-setup-and-phase-4).
 
 See [the implementation inventory](docs/IMPLEMENTATION.md) for the files created and verification boundaries.
