@@ -32,3 +32,14 @@ def discover_and_persist(db,categories):
             db.add(ProductOffer(id=offer.id,product_id=offer.product_id,merchant_id=offer.merchant_id,data=offer.model_dump(mode="json")))
     db.flush()
     return result
+
+
+def current_offer(db,offer_id):
+    row=db.get(ProductOffer,offer_id)
+    if not row:return None
+    offer=MerchantOffer.model_validate(row.data)
+    merchant=db.get(Merchant,row.merchant_id)
+    product=db.get(Product,row.product_id)
+    return offer.model_copy(update={"merchant_available":bool(merchant and merchant.available),
+        "available":offer.available and bool(product and product.data.get("available")),
+        "stock":min(offer.stock,product.data.get("stock",0)) if product else 0})

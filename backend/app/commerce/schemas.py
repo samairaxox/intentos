@@ -96,10 +96,23 @@ class ItemPatch(BaseModel):
     hard_constraints: list[SpecRule] | None = None
     soft_preferences: list[SpecRule] | None = None
     remove: bool = False
+    remove_hard_fields: list[str] = Field(default_factory=list)
+    remove_soft_fields: list[str] = Field(default_factory=list)
+
+class WeightPatch(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    performance: int | None = Field(default=None,ge=0,le=5)
+    quality: int | None = Field(default=None,ge=0,le=5)
+    portability: int | None = Field(default=None,ge=0,le=5)
+    battery: int | None = Field(default=None,ge=0,le=5)
+    value: int | None = Field(default=None,ge=0,le=5)
+    preferences: int | None = Field(default=None,ge=0,le=5)
+    cost_savings: int | None = Field(default=None,ge=0,le=5)
 
 class PreferencePatch(BaseModel):
     model_config=ConfigDict(extra="forbid")
     total_budget: int | None = Field(default=None,gt=0,le=10000000)
+    weights: WeightPatch | None = None
     items: list[ItemPatch] = Field(default_factory=list,max_length=5)
     spending_preference: Literal["balanced","quality","savings"] | None = None
     allowed_merchants: list[str] | None = None

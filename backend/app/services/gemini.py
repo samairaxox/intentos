@@ -18,12 +18,17 @@ class Explanations(BaseModel):
 
 class GeminiService:
     def generate(self, prompt, schema):
+        self.last_usage = {}
         if not settings.gemini_api_key:
             raise AIUnavailable("GEMINI_API_KEY is not configured. No AI output was generated.")
         try:
             with genai.Client(api_key=settings.gemini_api_key, http_options=types.HttpOptions(timeout=30000)) as client:
                 response = client.models.generate_content(model=settings.gemini_model, contents=prompt,
                     config=types.GenerateContentConfig(response_mime_type="application/json", response_schema=schema, temperature=0))
+                metadata = getattr(response, "usage_metadata", None)
+                for sdk_field, field in [("prompt_token_count","input_tokens"),("candidates_token_count","output_tokens"),("total_token_count","total_tokens")]:
+                    value = getattr(metadata, sdk_field, None)
+                    if isinstance(value,int): self.last_usage[field] = value
                 return schema.model_validate_json(response.text)
         except Exception as exc:
             raise AIUnavailable("Gemini request failed. Check API configuration, quota and connectivity.") from exc

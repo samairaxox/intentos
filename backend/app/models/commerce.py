@@ -61,6 +61,9 @@ class CommercePurchase(Base):
     alternative_index: Mapped[int]=mapped_column(Integer)
     execution_key: Mapped[str | None]=mapped_column(String(100),nullable=True,unique=True)
     execution_modes: Mapped[dict]=mapped_column(JSON,default=dict)
+    workflow: Mapped[dict]=mapped_column(JSON,default=dict)
+    execution_token: Mapped[str | None]=mapped_column(String(36),nullable=True)
+    authorization_digest: Mapped[str | None]=mapped_column(String(64),nullable=True)
     approved_at: Mapped[datetime | None]=mapped_column(DateTime(timezone=True),nullable=True)
     created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
 
