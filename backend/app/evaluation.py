@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
 from fastapi.testclient import TestClient
+from secrets import token_urlsafe
+from app.core.config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -39,8 +41,11 @@ def evaluate_one(scenario: dict) -> dict:
     app.dependency_overrides[get_ai]=lambda:FixtureAI()
     started=perf_counter()
     result={"id":scenario["id"],"kind":scenario["kind"],"passed":False,"plan_checks":0,"budget_compliant":0,"hard_constraints_satisfied":0,"replanned":False,"payment_verified":False}
+    credential=token_urlsafe(32)
+    previous_auth=(settings.auth_tokens,settings.auth_admins)
+    settings.auth_tokens={credential:'evaluation-fixture'};settings.auth_admins=['evaluation-fixture']
     try:
-        with TestClient(app) as client:
+        with TestClient(app,headers={'Authorization':'Bearer '+credential}) as client:
             def post(path,body,expected=200):
                 response=client.post('/api/v1'+path,json=body)
                 assert response.status_code==expected,(path,response.status_code,response.text)
@@ -111,6 +116,7 @@ def evaluate_one(scenario: dict) -> dict:
     except Exception as exc:
         result['error']=str(exc)
     finally:
+        settings.auth_tokens,settings.auth_admins=previous_auth
         result['elapsed_ms']=round((perf_counter()-started)*1000,3)
         app.dependency_overrides.clear();app.dependency_overrides.update(previous)
         engine.dispose()
