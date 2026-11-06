@@ -26,7 +26,7 @@ def test_approved_single_order_rejects_changed_seller(client):
 def test_cross_phase_session_read_is_a_client_error(client):
     result=client.post('/api/v1/commerce/sessions',json={'intent':{'total_budget':75000,'items':[{'category':'laptop'}]}})
     assert result.status_code==201
-    with TestClient(app,raise_server_exceptions=False) as transport:
+    with TestClient(app,raise_server_exceptions=False,headers=client.headers) as transport:
         response=transport.get('/api/v1/purchases/'+result.json()['session']['id'])
     assert response.status_code in [404,422], f'Observed {response.status_code}: {response.text}'
 
@@ -38,7 +38,7 @@ def test_database_outage_has_controlled_service_response(client,tmp_path):
     previous=app.dependency_overrides[get_db]
     app.dependency_overrides[get_db]=broken_database
     try:
-        with TestClient(app,raise_server_exceptions=False) as transport:
+        with TestClient(app,raise_server_exceptions=False,headers=client.headers) as transport:
             response=transport.get('/api/v1/products')
         assert response.status_code==503, f'Observed {response.status_code}: {response.text}'
     finally:
@@ -61,13 +61,13 @@ def test_requested_phase1_hard_and_soft_requirements(client):
     assert not any(eligible(p,conflicting) for p in products)
 
 
-def test_no_authentication_boundary_is_present(client):
+def test_anonymous_access_is_denied(client):
     order,_=make_order(client,'audit-anonymous-order')
-    # Observational security test: success documents local-only behavior, not a security approval.
+    # Anonymous callers must not read or authorize a known purchase.
     with TestClient(app) as anonymous:
         response=anonymous.get('/api/v1/orders/'+order['id'])
         approved=anonymous.post('/api/v1/orders/'+order['id']+'/approve',json={'approved':True})
-    assert response.status_code==200 and approved.status_code==200
+    assert response.status_code==401 and approved.status_code==401
 
 
 def test_invalid_single_order_transitions_and_amount_input(client):

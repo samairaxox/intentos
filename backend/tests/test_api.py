@@ -22,7 +22,7 @@ def client():
         with factory() as db: yield db
     app.dependency_overrides[get_db]=database
     app.dependency_overrides[get_ai]=lambda:FakeAI(Intent(category="laptop",max_budget=75000,required_specifications=[Constraint(field="ram_gb",operator="min",value=16),Constraint(field="processor_brand",operator="eq",value="Intel")]))
-    with TestClient(app) as client:
+    with TestClient(app,headers={"Authorization":"Bearer test-owner-token-00000000000000000001"}) as client:
         client.factory=factory
         yield client
     app.dependency_overrides.clear()

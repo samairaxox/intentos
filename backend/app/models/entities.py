@@ -21,6 +21,7 @@ class PurchaseSession(Base):
     __tablename__ = "purchase_sessions"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     request: Mapped[str] = mapped_column(String(4000))
+    owner_id: Mapped[str | None] = mapped_column(String(160), nullable=True)
     result: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 

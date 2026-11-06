@@ -71,9 +71,11 @@ export class ApiError extends Error {
 }
 const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 export async function api<T>(path: string, body?: unknown): Promise<T> {
+  let token="";
+  try { if(typeof window!=="undefined")token=sessionStorage.getItem("intentos-access-token")||""; } catch { /* Authentication remains fail-closed. */ }
   const response = await fetch(base + path, {
     method: body === undefined ? "GET" : "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json",...(token?{Authorization:`Bearer ${token}`}:{}) },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   if (!response.ok) {

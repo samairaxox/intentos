@@ -16,12 +16,14 @@ handler = logging.StreamHandler()
 handler.setFormatter(JsonFormatter())
 logging.basicConfig(level=logging.INFO,handlers=[handler])
 app = FastAPI(title="IntentOS",description="Local-only demo commerce. No real money or multi-user authentication.")
-app.add_middleware(CORSMiddleware,allow_origins=["http://localhost:3000","http://127.0.0.1:3000"],allow_methods=["GET","POST"],allow_headers=["Content-Type"])
+app.add_middleware(CORSMiddleware,allow_origins=["http://localhost:3000","http://127.0.0.1:3000"],allow_methods=["GET","POST"],allow_headers=["Content-Type","Authorization"])
 app.include_router(router)
 app.include_router(commerce_router)
 app.include_router(multi_router)
 from app.api.finance_routes import router as finance_router
 app.include_router(finance_router)
+from app.core.auth import authentication
+app.middleware("http")(authentication)
 
 @app.exception_handler(DBAPIError)
 async def database_error(request,exc):
