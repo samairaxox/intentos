@@ -2,11 +2,13 @@
 
 A local agentic commerce workspace for single-product purchasing and multi-product budget optimization, with explicit approval and **simulated** payments.
 
+**Phase 4:** [Financial decision workspace](http://127.0.0.1:3000/finance) adds protected reserves, category limits, risk-aware strategies, recorded and explicitly synthetic price history, conditional buy-versus-wait analysis, saved what-if scenarios and approval-safe financial revisions. See [Phase 4 architecture, APIs, migrations and limitations](docs/PHASE4.md) and [measured demo benchmarks](docs/benchmarks/phase4.md).
+
 **Phase 3:** [Commerce intelligence workspace](http://127.0.0.1:3000/commerce) adds normalized merchant offers, Decimal landed costs, session memory, persistent traces and reconciliation-aware multi-merchant mock execution. See [Phase 3 setup, APIs, migrations and limitations](docs/PHASE3.md). Live merchant and sandbox payment adapters are explicitly pending; no real money is processed.
 
 **Phase 2:** open [the setup optimizer](http://127.0.0.1:3000/setup) for complete multi-category carts. See [Phase 2 architecture, upgrade steps, APIs and limitations](docs/PHASE2.md) and the [generated evaluation results](docs/benchmarks/phase2.md). The original single-laptop interface remains at `/`.
 
-**Status:** Phase 3 extends the verified Phase 1/2 application with merchant offers and safe mock orchestration. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
+**Status:** Phase 4 extends the verified Phase 1–3 application with deterministic financial planning and protected approval boundaries. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
 
 ## Start on Windows PowerShell
 
