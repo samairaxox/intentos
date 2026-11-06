@@ -41,6 +41,8 @@ def aggregate(db,purchase):
     elif 'REFUNDED' in states and all(s in ['REFUNDED','FAILED','CHECKOUT_FAILED','CANCELLED'] for s in states):purchase.status='COMPENSATED'
     elif 'CAPTURED' in states:purchase.status='PARTIAL_FAILURE'
     elif states and all(s in ['FAILED','CHECKOUT_FAILED','CANCELLED'] for s in states):purchase.status='PAYMENT_FAILED'
+    elif any(s in ['FAILED','CHECKOUT_FAILED'] for s in states):purchase.status='PARTIAL_FAILURE'
+    elif states and all(s=='AUTHORIZED' for s in states):purchase.status='APPROVED'
     return purchase.status
 
 

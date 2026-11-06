@@ -76,7 +76,9 @@ def create_session(db,request,ai):
     db.add(session);db.flush()
     plan=CommercePlan(session_id=session.id,version=1,status='PLANNING',intent=session.intent,result={},workflow={'text':request.text or '', 'intent':session.intent,'ai_used':bool(request.text),'completed':[]})
     db.add(plan);db.flush();session.latest_plan_id=plan.id;db.commit()
-    run_planning(db,plan,ai)
+    try:run_planning(db,plan,ai)
+    except Exception as exc:
+        setattr(exc,'commerce_session_id',session.id);setattr(exc,'commerce_plan_id',plan.id);raise
     session.intent=plan.intent;save_snapshots(db,plan);db.commit()
     return session,plan
 

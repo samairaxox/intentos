@@ -81,6 +81,7 @@ def optimize_offers(intent: CommerceIntent,products: list[CanonicalProduct],offe
         total=totals['final_price']
         combinations.append({'items':lines,'total':format(total,'.2f'),'remaining_budget':format(Decimal(intent.total_budget)-total,'.2f'),
             'cost_breakdown':{key:format(value,'.2f') for key,value in totals.items()},'merchant_totals':{k:format(v,'.2f') for k,v in merchant_totals.items()},
+            'budget_utilization_percent':format(total/Decimal(intent.total_budget)*100,'.2f'),'merchant_allocation':[{'merchant_id':k,'amount':format(v,'.2f'),'share_percent':format(v/total*100,'.2f') if total else '0.00'} for k,v in merchant_totals.items()],
             'utility_score':int(solver.value(utility)),'solver_status':solver.status_name(status),
             'explanation':f"Selected {sum(quantities.values())} units across {len(merchant_totals)} demo/authorized merchants within the confirmed cost budget. Shipping and fees included; unverified discounts were not used."})
         model.add_bool_or([~x if chosen else x for x,chosen in zip(variables,flags)])

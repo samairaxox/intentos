@@ -49,7 +49,7 @@ def present_purchase(db,purchase):
         'approved':bool(purchase.approved_at),'suborders':rows,'execution_key':purchase.execution_key,'execution_modes':purchase.execution_modes,
         'captured_total':format(sum((s.amount for s in suborders(db,purchase) if s.status=='CAPTURED'),Decimal('0.00')),'.2f'),
         'refunded_total':format(sum((s.amount for s in suborders(db,purchase) if s.status=='REFUNDED'),Decimal('0.00')),'.2f'),
-        'mode':'mock','warning':'No real funds moved. Partial, unknown and compensation-pending outcomes are not completed purchases.'}
+        'workflow':purchase.workflow,'mode':'mock','warning':'No real funds moved. Partial, unknown and compensation-pending outcomes are not completed purchases.'}
 
 
 def reject(db,purchase_id):

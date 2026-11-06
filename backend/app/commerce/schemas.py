@@ -154,3 +154,52 @@ class OfferChange(BaseModel):
 class DemoResolution(BaseModel):
     model_config=ConfigDict(extra="forbid")
     outcome: Literal["CAPTURED","FAILED"]
+
+
+class CompensationRequest(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    pending: bool = False
+
+class RefreshRequest(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    offer_ids: list[str] = Field(default_factory=list,max_length=200)
+
+class PlanView(BaseModel):
+    id:str
+    session_id:str
+    parent_id:str | None
+    version:int
+    status:str
+    intent:dict
+    result:dict
+    workflow:dict
+    changes:list[str]
+    purchase_ids:list[str]
+
+class SessionView(BaseModel):
+    id:str
+    version:int
+    intent:dict
+    conversation:list[dict]
+    latest_plan_id:str | None
+    plans:list[dict]
+
+class SessionResult(BaseModel):
+    session:SessionView
+    plan:PlanView
+
+class PurchaseView(BaseModel):
+    id:str
+    plan_id:str
+    status:str
+    amount:Money
+    snapshot:dict
+    approved:bool
+    suborders:list[dict]
+    execution_key:str | None
+    execution_modes:dict
+    captured_total:Money
+    refunded_total:Money
+    mode:Literal["mock"]
+    warning:str
+    workflow:dict
