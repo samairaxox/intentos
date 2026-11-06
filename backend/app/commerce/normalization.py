@@ -21,9 +21,11 @@ class ProductDeduplicationService:
         return hashlib.sha256(json.dumps(identity,sort_keys=True,separators=(",",":")).encode()).hexdigest()
 
     def deduplicate(self, products: list[CanonicalProduct]) -> tuple[list[CanonicalProduct],dict[str,str]]:
-        unique={};aliases={}
+        unique={};aliases={};seen_ids={}
         for product in sorted(products,key=lambda p:p.id):
             fingerprint=self.identity(product)
+            if product.id in seen_ids and seen_ids[product.id]!=fingerprint:raise ValueError("Conflicting globally unique product ID")
+            seen_ids[product.id]=fingerprint
             unique.setdefault(fingerprint,product)
             aliases[product.id]=unique[fingerprint].id
         return list(unique.values()),aliases

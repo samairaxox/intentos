@@ -1,4 +1,5 @@
 import logging
+from app.core.time import utc_iso
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -66,4 +67,4 @@ def pay(order_id: str, request: PayRequest, db: Session = Depends(get_db)):
 def events(order_id: str, db: Session = Depends(get_db)) -> list[dict]:
     orders.get_order(db,order_id)
     rows = db.scalars(select(AuditEvent).where(AuditEvent.order_id==order_id).order_by(AuditEvent.created_at,AuditEvent.id))
-    return [{"id":e.id,"event":e.event,"created_at":e.created_at.isoformat()} for e in rows]
+    return [{"id":e.id,"event":e.event,"created_at":utc_iso(e.created_at)} for e in rows]

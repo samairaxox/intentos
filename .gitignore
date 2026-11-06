@@ -12,3 +12,5 @@ __pycache__/
 *.tsbuildinfo
 
 /frontend-preview.jpg
+
+/docs/validation/*.xml

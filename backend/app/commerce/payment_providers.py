@@ -29,9 +29,10 @@ class MockPaymentProvider(PaymentProvider):
         if simulation in ['timeout_captured','timeout_unknown']:raise TimeoutError('Mock provider response timed out; outcome must be reconciled')
         return outcome
 
-    def lookup(self,idempotency_key):
+    def lookup(self,idempotency_key,expected_amount:Decimal | None=None):
         with self.factory() as ledger:
             receipt=ledger.get(MockProviderReceipt,idempotency_key)
+            if receipt and expected_amount is not None and receipt.amount!=expected_amount:return 'UNKNOWN'
             return receipt.outcome if receipt else 'UNKNOWN'
 
     def compensate(self,idempotency_key,pending=False):

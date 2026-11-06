@@ -1,0 +1,68 @@
+{
+  "recorded_at_utc": "2026-11-06T05:11:51.107627+00:00",
+  "scope": "Actual local regression execution; external model/providers mocked or explicitly unavailable. No live price, real payment or PostgreSQL concurrency claim.",
+  "backend": {
+    "tests": 141,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 64.059,
+    "baseline_phase2_tests": 97,
+    "additional_tests": 44,
+    "warnings": 14,
+    "database": "isolated SQLite",
+    "by_module": {
+      "backend.tests.test_api": 12,
+      "backend.tests.test_commerce_api": 12,
+      "backend.tests.test_commerce_offers": 14,
+      "backend.tests.test_commerce_payments": 8,
+      "backend.tests.test_commerce_workflow": 4,
+      "backend.tests.test_evaluation": 52,
+      "backend.tests.test_gemini": 6,
+      "backend.tests.test_migrations": 1,
+      "backend.tests.test_multi_api": 11,
+      "backend.tests.test_multi_schema": 2,
+      "backend.tests.test_offer_optimizer": 5,
+      "backend.tests.test_optimizer": 5,
+      "backend.tests.test_plans": 1,
+      "backend.tests.test_time": 1,
+      "backend.tests.test_workflow": 7
+    }
+  },
+  "frontend": {
+    "typecheck": "passed",
+    "production_build": "passed",
+    "builder": "Next.js webpack",
+    "routes": [
+      "/",
+      "/setup",
+      "/commerce"
+    ]
+  },
+  "browser_acceptance": {
+    "input_mode": "explicit structured requirements; no AI extraction claimed",
+    "estimated_demo_total": "90263.75",
+    "merchant_count": 3,
+    "partial_capture_total": "26096.25",
+    "partial_outcome": "PARTIAL_FAILURE",
+    "compensation_states": [
+      "COMPENSATION_PENDING",
+      "COMPENSATED"
+    ],
+    "final_captured_total": "0.00",
+    "final_mock_refunded_total": "26096.25",
+    "session_memory": "Budget 100000 and five required categories retained; portability weight changed from 1 to 5",
+    "material_change": "Selected base price increased 4000; alternative merchant selected in version 3 behind fresh approval"
+  },
+  "not_verified": [
+    "live Gemini calls",
+    "authorized merchant API",
+    "real or sandbox payment gateway",
+    "PostgreSQL execution and concurrent workers"
+  ],
+  "commands": [
+    "python -m pytest -q --junitxml=docs/validation/phase3.xml",
+    "npm --prefix frontend run typecheck",
+    "npm --prefix frontend run build"
+  ]
+}

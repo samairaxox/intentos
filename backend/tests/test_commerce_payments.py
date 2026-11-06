@@ -44,6 +44,8 @@ def test_partial_failure_and_mock_compensation(db,purchase):
     assert Decimal(present_purchase(db,purchase)['captured_total'])>0
     PaymentReconciliationService().compensate(db,purchase.id,pending=True)
     assert purchase.status=='COMPENSATION_PENDING'
+    assert Decimal(present_purchase(db,purchase)['captured_total'])>0
+    assert present_purchase(db,purchase)['refunded_total']=='0.00'
     PaymentReconciliationService().compensate(db,purchase.id)
     assert purchase.status=='COMPENSATED'
     assert present_purchase(db,purchase)['captured_total']=='0.00'
@@ -123,3 +125,14 @@ def test_reconciliation_fences_late_worker(db,purchase,monkeypatch):
     PaymentExecutionService().execute(db,purchase.id,request,CommerceAI())
     assert purchase.status=='PAID'
     assert len(list(db.scalars(select(MockProviderReceipt))))==len(suborders(db,purchase))
+
+
+def test_reconciliation_rejects_wrong_provider_amount(db,purchase):
+    approve(db,purchase)
+    first=suborders(db,purchase)[0]
+    request=ExecuteRequest(idempotency_key='mismatched-amount-execution',simulations={first.merchant_id:'timeout_captured'})
+    PaymentExecutionService().execute(db,purchase.id,request,CommerceAI())
+    receipt=db.scalars(select(MockProviderReceipt)).first()
+    receipt.amount+=Decimal('0.01');db.commit()
+    PaymentReconciliationService().reconcile(db,purchase.id)
+    assert purchase.status=='PAYMENT_UNKNOWN' and first.status=='UNKNOWN'

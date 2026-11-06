@@ -43,6 +43,8 @@ def aggregate(db,purchase):
     elif states and all(s in ['FAILED','CHECKOUT_FAILED','CANCELLED'] for s in states):purchase.status='PAYMENT_FAILED'
     elif any(s in ['FAILED','CHECKOUT_FAILED'] for s in states):purchase.status='PARTIAL_FAILURE'
     elif states and all(s=='AUTHORIZED' for s in states):purchase.status='APPROVED'
+    action={'PAYMENT_UNKNOWN':'RECONCILE_WITH_PROVIDER_BEFORE_RETRY','PARTIAL_FAILURE':'REVIEW_PARTIAL_OUTCOME_OR_EXPLICITLY_RETRY_CONFIRMED_FAILURE','COMPENSATION_PENDING':'AWAIT_COMPENSATION_CONFIRMATION','PAYMENT_FAILED':'EXPLICIT_RETRY_OR_NEW_APPROVAL_REQUIRED'}.get(purchase.status)
+    purchase.workflow={**(purchase.workflow or {}),'status':purchase.status,'action_required':action}
     return purchase.status
 
 
@@ -196,7 +198,7 @@ class PaymentReconciliationService:
             attempt=attempts[-1]
             if sub.status not in ['UNKNOWN','PROCESSING','REFUND_PENDING']:continue
             db.commit()
-            outcome=MockPaymentProvider(db.get_bind()).lookup(attempt.idempotency_key)
+            outcome=MockPaymentProvider(db.get_bind()).lookup(attempt.idempotency_key,payment.amount)
             db.add(ReconciliationRecord(attempt_id=attempt.id,outcome=outcome))
             if outcome in ['CAPTURED','FAILED','REFUNDED','REFUND_PENDING']:
                 sub.status=outcome;payment.status=outcome;attempt.status=outcome

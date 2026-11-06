@@ -1,3 +1,4 @@
+from app.core.time import utc_iso
 from datetime import timedelta
 from decimal import Decimal
 from fastapi import APIRouter,Depends,HTTPException
@@ -139,4 +140,4 @@ def change_offer(request:OfferChange,db:Session=Depends(get_db))->dict:
 def traces(session_id:str,db:Session=Depends(get_db))->list[dict]:
     sessions.session_for(db,session_id)
     records=db.scalars(select(WorkflowTrace).where(WorkflowTrace.session_id==session_id).order_by(WorkflowTrace.created_at,WorkflowTrace.id))
-    return [{'id':r.id,'workflow_id':r.workflow_id,'session_id':r.session_id,'node':r.node,'status':r.status,'details':r.details,'created_at':r.created_at.isoformat()} for r in records]
+    return [{'id':r.id,'workflow_id':r.workflow_id,'session_id':r.session_id,'node':r.node,'status':r.status,'details':r.details,'created_at':utc_iso(r.created_at)} for r in records]

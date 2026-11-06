@@ -30,6 +30,7 @@ def optimize_offers(intent: CommerceIntent,products: list[CanonicalProduct],offe
     for req in intent.items:
         peers=[v for v in eligible if v["product"]["category"]==req.category]
         best=max((Decimal(v['product']['quality_score'])/Decimal(max(1,v['pricing']['final_minor'])) for v in peers),default=Decimal(1))
+        best=max(Decimal('0.0000000001'),best)
         category_vars=[]
         for view in peers:
             p=view['product'];offer=view['offer'];cost=view['pricing']['final_minor'];specs=p['specifications']

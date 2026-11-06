@@ -45,6 +45,7 @@ def test_multi_merchant_execution_graph_and_partial_failure(client):
     assert any(s['status']=='CAPTURED' for s in response.json()['suborders'])
     traces=client.get('/api/v1/commerce/sessions/'+result['session']['id']+'/traces').json()
     assert any(t['node']=='verify_result' for t in traces)
+    assert all(t['created_at'].endswith('+00:00') for t in traces)
     assert all('api_key' not in str(t['details']) for t in traces)
     pending=client.post(path+'/compensate',json={'pending':True})
     assert pending.json()['status']=='COMPENSATION_PENDING'

@@ -87,7 +87,7 @@ class ProviderRegistry:
             if offer.product_id not in aliases:
                 warnings.append(f"Offer {offer.id} has no normalized product");continue
             revised=offer.model_copy(update={"product_id":aliases[offer.product_id]})
-            key=(revised.provider_id,revised.id)
-            if key in unique and unique[key]!=revised: raise ValueError("Conflicting duplicate offer ID")
+            key=revised.id
+            if key in unique and unique[key]!=revised: raise ValueError("Conflicting globally unique offer ID")
             unique[key]=revised
         return DiscoveryResult(deduplicated,list(unique.values()),warnings)

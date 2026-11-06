@@ -1,3 +1,4 @@
+from app.core.time import utc_iso
 from decimal import Decimal
 from collections import defaultdict
 from fastapi import HTTPException
@@ -42,12 +43,12 @@ def present_purchase(db,purchase):
     rows=[]
     for sub in suborders(db,purchase):
         payment=intent_for(db,sub)
-        attempts=[{'id':a.id,'status':a.status,'attempt_number':a.attempt_number,'retry_after':a.retry_after.isoformat() if a.retry_after else None} for a in attempts_for(db,payment)]
+        attempts=[{'id':a.id,'status':a.status,'attempt_number':a.attempt_number,'retry_after':utc_iso(a.retry_after) if a.retry_after else None} for a in attempts_for(db,payment)]
         rows.append({'id':sub.id,'merchant_id':sub.merchant_id,'merchant_name':sub.items[0]['offer']['merchant_name'],'amount':format(sub.amount,'.2f'),
             'status':sub.status,'items':sub.items,'payment_intent_id':payment.id,'attempts':attempts})
     return {'id':purchase.id,'plan_id':purchase.plan_id,'status':purchase.status,'amount':format(purchase.amount,'.2f'),'snapshot':purchase.snapshot,
         'approved':bool(purchase.approved_at),'suborders':rows,'execution_key':purchase.execution_key,'execution_modes':purchase.execution_modes,
-        'captured_total':format(sum((s.amount for s in suborders(db,purchase) if s.status=='CAPTURED'),Decimal('0.00')),'.2f'),
+        'captured_total':format(sum((s.amount for s in suborders(db,purchase) if s.status in ['CAPTURED','REFUND_PENDING']),Decimal('0.00')),'.2f'),
         'refunded_total':format(sum((s.amount for s in suborders(db,purchase) if s.status=='REFUNDED'),Decimal('0.00')),'.2f'),
         'workflow':purchase.workflow,'mode':'mock','warning':'No real funds moved. Partial, unknown and compensation-pending outcomes are not completed purchases.'}
 

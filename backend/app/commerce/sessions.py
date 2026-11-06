@@ -1,4 +1,5 @@
 from copy import deepcopy
+from time import perf_counter
 from decimal import Decimal
 from fastapi import HTTPException
 from sqlalchemy import select
@@ -102,7 +103,10 @@ def new_version(db,session,intent,ai,reasons,ai_used=False):
     plan=CommercePlan(session_id=session.id,parent_id=old.id,version=session.version,status='PLANNING',intent=session.intent,result={},
         workflow={'intent':session.intent,'ai_used':ai_used,'completed':[]},changes=reasons+['Fresh approval is required for all changed purchase terms.'])
     db.add(plan);db.flush();session.latest_plan_id=plan.id;db.commit()
-    run_planning(db,plan,ai);save_snapshots(db,plan);db.commit()
+    try:run_planning(db,plan,ai)
+    except Exception as exc:
+        setattr(exc,"commerce_session_id",session.id);setattr(exc,"commerce_plan_id",plan.id);raise
+    save_snapshots(db,plan);db.commit()
     return plan
 
 
@@ -110,7 +114,15 @@ def update_session(db,session_id,request,ai):
     session=session_for(db,session_id)
     if session.version!=request.expected_version:raise HTTPException(409,'Session version changed; reload before applying preferences')
     intent=CommerceIntent.model_validate(session.intent)
-    patch=request.patch or ai.patch(request.text,session.intent)
+    if request.patch:
+        patch=request.patch
+    else:
+        started=perf_counter();trace=TraceRecorder(db,session.latest_plan_id,session.id)
+        try:
+            patch=ai.patch(request.text,session.intent)
+            trace.record('merge_preference_intent','COMPLETED',{'duration_ms':round((perf_counter()-started)*1000,3),**getattr(getattr(ai,'service',None),'last_usage',{})})
+        except Exception as exc:
+            trace.record('merge_preference_intent','ERROR',{'duration_ms':round((perf_counter()-started)*1000,3),'error_type':type(exc).__name__});db.commit();raise
     updated=merge_preferences(intent,patch)
     if updated==intent:raise HTTPException(422,'No explicit preference change was supplied')
     session.conversation=session.conversation+[{'role':'user','text':request.text or 'Explicit preference patch','patch':patch.model_dump(mode='json',exclude_none=True)}]

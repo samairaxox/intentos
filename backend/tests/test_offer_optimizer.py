@@ -56,3 +56,22 @@ def test_persisted_offers_preserve_terms_and_merchant_availability():
         offer=next(o for o in second.offers if o.id==row.id)
         assert offer.base_price==Decimal('70000.50') and not offer.merchant_available
     engine.dispose()
+
+
+def test_zero_quality_scores_do_not_divide_by_zero():
+    found=demo()
+    products=[p.model_copy(update={'quality_score':0}) for p in found.products]
+    intent=CommerceIntent(total_budget=75000,items=[{'category':'laptop'}])
+    assert optimize_offers(intent,products,found.offers)['status']=='READY'
+
+
+def test_quantity_uses_distinct_merchant_stock_not_duplicate_listings():
+    found=demo();product=found.products[0]
+    raw=dict(id='offer-a',product_id=product.id,merchant_id='merchant-a',merchant_name='A',base_price='100.00',stock=1,source_type='demo',verification_status='demo',retrieved_at=found.offers[0].retrieved_at,provider_id='demo')
+    a=MerchantOffer(**raw)
+    b=MerchantOffer(**{**raw,'id':'offer-b','merchant_id':'merchant-b','merchant_name':'B'})
+    intent=CommerceIntent(total_budget=250,items=[{'category':product.category,'quantity':2}])
+    result=optimize_offers(intent,[product],[a,b])
+    assert result['combinations'][0]['total']=='200.00'
+    duplicate=a.model_copy(update={'id':'same-merchant-other-listing'})
+    assert optimize_offers(intent,[product],[a,duplicate])['status']=='NO_MATCH'

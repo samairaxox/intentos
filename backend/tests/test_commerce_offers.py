@@ -20,7 +20,7 @@ def test_decimal_totals_and_discount_eligibility(offer):
     assert priced['final_price']=='106.30' and priced['final_minor']==10630
     assert priced['confirmed_discount']=='5.05' and len(priced['potential_discounts'])==1
 
-@pytest.mark.parametrize('invalid',[0.1,'NaN','Infinity','-1.00','1.001',True])
+@pytest.mark.parametrize('invalid',[0.1,'not-a-price','NaN','Infinity','-1.00','1.001',True])
 def test_money_rejects_float_invalid_or_fractional_paise(offer,invalid):
     with pytest.raises((ValidationError,ValueError)):
         MerchantOffer.model_validate({**offer.model_dump(),'base_price':invalid})
@@ -53,3 +53,19 @@ def test_registry_isolates_provider_failure():
     registry=ProviderRegistry();registry.register(Broken())
     result=registry.discover(['laptop'])
     assert not result.offers and result.warnings
+
+
+def test_unsupported_taxes_and_expired_discount_not_applied(offer):
+    offer.estimated_taxes=Decimal('50.00');offer.taxes_supported=False
+    offer.discounts=[Discount(label='expired',amount='20.00',eligibility_verified=True,eligible=True,expires_at=utc()-timedelta(seconds=1))]
+    priced=TotalCostService().calculate(offer)
+    assert priced['estimated_taxes']=='0.00' and priced['confirmed_discount']=='0.00'
+    offer.taxes_supported=True
+    assert TotalCostService().calculate(offer)['estimated_taxes']=='50.00'
+
+
+def test_conflicting_product_identity_is_rejected():
+    a=CanonicalProduct(id='same-id',category='laptop',brand='Demo',model='X',name='Demo X',specifications={'ram_gb':16},performance=60,quality_score=60)
+    b=a.model_copy(update={'specifications':{'ram_gb':32}})
+    with pytest.raises(ValueError,match='Conflicting'):
+        ProductDeduplicationService().deduplicate([a,b])
