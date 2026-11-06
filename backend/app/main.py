@@ -15,7 +15,7 @@ class JsonFormatter(logging.Formatter):
 handler = logging.StreamHandler()
 handler.setFormatter(JsonFormatter())
 logging.basicConfig(level=logging.INFO,handlers=[handler])
-app = FastAPI(title="IntentOS",description="Local-only demo commerce. No real money or multi-user authentication.")
+app = FastAPI(title="IntentOS",description="Local-only demo commerce. Operator-provisioned bearer identities; no real money or public-deployment approval.")
 app.include_router(router)
 app.include_router(commerce_router)
 app.include_router(multi_router)

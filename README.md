@@ -10,6 +10,24 @@ A local agentic commerce workspace for single-product purchasing and multi-produ
 
 **Status:** Phase 4 extends the verified Phase 1–3 application with deterministic financial planning and protected approval boundaries. Automated end-to-end API tests use mocked Gemini and SQLite. Live Gemini and PostgreSQL acceptance checks remain to be run with your local configuration. All products, specifications, performance scores and prices are synthetic demo data, not verified merchant offers.
 
+## Phase 3.5: local access and safe recovery
+
+API access now requires an operator-provisioned bearer credential. Empty `AUTH_TOKENS` denies access. From the repository root, in the backend terminal, generate a private credential locally:
+
+```powershell
+$privateToken = .\.venv\Scripts\python -c "import secrets; print(secrets.token_urlsafe(32))"
+$env:AUTH_TOKENS = @{ $privateToken = "local-owner" } | ConvertTo-Json -Compress
+$env:AUTH_ADMINS = '["local-owner"]'
+```
+
+Keep the credential private; enter it in the browser's **Operator-issued access token** field. It is stored only in that tab's session storage and sent as a Bearer header. User identity comes from the server mapping, never a client owner ID. `AUTH_ADMINS` permits global demo mutations; ordinary users cannot change shared catalog/ledger fixtures. This local MVP has no signup/password system and is **not approved for public deployment**; production identity lifecycle, TLS and concurrency acceptance remain required.
+
+Run migrations through `0008` before starting the backend. Existing unowned records remain intact and inaccessible; only if all unowned historical sessions belong to the intended local identity, explicitly adopt them from `backend` with `..\.venv\Scripts\python -m app.services.claim_legacy --owner local-owner --confirm`. Existing ownership is never overwritten. Old unpaid orders without immutable terms must be recreated and freshly approved; paid records are retained.
+
+Interrupted planning returns a saved `session_id` (Phase 1) or `plan_id` (Phase 2). Authenticated `POST /api/v1/purchases/{id}/resume` and `POST /api/v1/plans/{id}/resume` retain completed interpretation but rediscover current catalog terms. They do not execute payments. The recovery boundary is exposed through the API; the UI has not been redesigned.
+
+Optional live Gemini check, **only after explicit authorization for one potentially billable request**: from `backend`, run `..\.venv\Scripts\python -m app.services.gemini_smoke --allow-one-request`. It makes at most one request with a 64-token output cap and validates the response. It was tested with mocks, not run live. PostgreSQL connectivity remains unverified/unavailable in this environment; no databases were wiped.
+
 ## Start on Windows PowerShell
 
 Prerequisites: Python 3.14 (tested), Node.js 24 (tested), Docker Desktop with Compose, and a Gemini API key. Run these commands from the repository root unless shown otherwise.

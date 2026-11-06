@@ -1,3 +1,22 @@
+> **Phase 3.5 stabilization update — 2026-11-06.** This section is current; the comprehensive audit below is retained as the historical pre-fix record.
+>
+> **Readiness: NOT READY for public/live deployment.** The local foundation is stabilized; operator key lifecycle/TLS hardening and live Gemini/PostgreSQL acceptance remain outstanding. No Phase 4 features were added and no UI redesign was performed.
+>
+> - **AUD-002 resolved:** shared deterministic, order-independent SHA-256 purchase terms; immutable legacy selected terms and approval digests; Phase 3 binds the complete suborder collection. Material changes invalidate approval. Monetary terms normalize with Decimal. Existing transaction locks and execution fences remain in use.
+> - **AUD-003 resolved:** incompatible/missing single-workflow session IDs return controlled 404; the original assertion now passes normally.
+> - **AUD-004 resolved:** centralized sanitized database errors return structured 503 for operational/connection failure, safely roll back and never blindly retry financial writes. The original assertion now passes normally.
+> - **AUD-001 partially resolved:** operator-provisioned bearer credentials, server-assigned root-session ownership inherited by orders/transactions, cross-user denial and restricted global demo mutations. Empty auth configuration denies access. No anonymous cookie/password substitute is claimed; public hardening is still required.
+> - **AUD-005 resolved at planning boundaries:** Phase 1/2 save node checkpoints and expose authenticated resume APIs. Completed interpretation is retained, catalog/stock are rediscovered and incomplete recommendations cannot enter checkout. Financial operations are not replayed.
+> - **AUD-006 remains:** frontend lint and Python vulnerability-scanning tooling are not installed/configured; no dependency installations were performed. TypeScript and production-build checks are used without pretending they are lint.
+>
+> **Validation:** **179 passed, 0 failed, 0 expected failures, 0 skipped** in the final full backend run (52.00 s). Frontend typecheck and the single production build passed. Three original regressions now pass without xfail markers. The first full run exposed 52 anonymous evaluation-harness failures (127 passed); after isolated fixture credentials were added without weakening assertions, representative tests and the necessary full rerun passed. No standalone expensive benchmark was run.
+>
+> **Integrations/cost:** official Gemini SDK/schema/timeout/error behavior and the optional bounded one-request smoke command were mock-tested. Estimated live Gemini calls: **0**; actual live calls: **0**. The smoke command was not executed live. One read-only PostgreSQL connectivity attempt failed with OperationalError; psql is present, Docker is unavailable, no database was wiped and PostgreSQL lifecycle tests remain blocked.
+>
+> **Upgrade/setup:** migrations 0007/0008 add immutable legacy approval terms and session ownership. Existing unowned history stays inaccessible until explicitly assigned by the local operator; old unpaid orders without bound terms must be recreated and freshly approved. Paid records are retained. See the [Phase 3.5 setup/recovery instructions](README.md#phase-35-local-access-and-safe-recovery).
+>
+> **Remaining issue counts:** P0 **0**, P1 **0**, P2 **1** (public-deployment authentication hardening), P3 **1** (lint tooling). External verification gaps remain separately listed. Historical failure counts and issue classifications below are not current results.
+
 # IntentOS — independent Phase 1–3 functional audit
 
 Audit date: 2026-11-06 (Asia/Calcutta). Audited application commit: `74c968391477ccdaf02959b0d25e7b3a4113dbbb`.

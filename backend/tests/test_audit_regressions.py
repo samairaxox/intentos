@@ -1,4 +1,4 @@
-"""Independent audit probes. Strict xfails preserve unresolved findings without changing production code."""
+"""Audit regression probes retained as ordinary tests after the Phase 3.5 fixes."""
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, select

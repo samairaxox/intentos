@@ -1,11 +1,11 @@
 {
-  "audit_timestamp": "2026-11-06T11:19:18.518253+00:00",
+  "audit_timestamp": "2026-11-06T11:50:19.729582+00:00",
   "audit_timezone": "Asia/Calcutta",
-  "git_commit_sha": "74c968391477ccdaf02959b0d25e7b3a4113dbbb",
+  "git_commit_sha": "32881f45bedb8418dafd92fffd00570d289391e0",
   "git_branch": "master",
   "git_remote": "https://github.com/samairaxox/intentos.git",
   "initial_worktree_clean": true,
-  "scope": "Phase 1-3 at current commit; existing Phase 4 not implemented or changed by this audit",
+  "scope": "Phase 3.5 stabilization of existing flows; no Phase 4 features or UI redesign",
   "environment": {
     "platform": "Windows-11-10.0.26200-SP0",
     "python": "3.14.7",
@@ -29,7 +29,7 @@
     "browser_automation_available": true
   },
   "readiness_verdict": "NOT READY",
-  "readiness_reason": "Unresolved Phase 1 approval binding defect plus missing live Gemini/PostgreSQL acceptance prevent unqualified sign-off; local deterministic demo flows substantially work.",
+  "readiness_reason": "Critical local defects fixed and verified. Public identity lifecycle/TLS hardening and live Gemini/PostgreSQL acceptance remain required; this is an operator-provisioned local MVP.",
   "phase_statuses": {
     "phase1": "PARTIAL",
     "phase2": "PARTIAL",
@@ -94,24 +94,25 @@
     },
     {
       "feature": "Phase 1 approval binding to seller/product terms",
-      "status": "BROKEN",
-      "evidence": "Seller changed after approval; payment still returned 200 PAID",
-      "file_function": "services/orders.py: verify_single",
-      "test_result": "AUD-002 strict xfail; unmasked failure"
+      "status": "WORKING",
+      "evidence": "Resolved and verified in Phase 3.5 targeted tests and final full suite",
+      "file_function": "services/approval.py; services/orders.py; commerce/payments.py",
+      "test_result": "PASS without expected-failure markers"
     },
     {
       "feature": "Phase 1 frontend/backend integration",
       "status": "WORKING",
       "evidence": "Input, intent fields, comparison, selection, approval, history, mock payment exercised",
       "file_function": "frontend/src/app/page.tsx",
-      "test_result": "Browser with explicitly fixed AI fixture"
+      "test_result": "Browser with explicitly fixed AI fixture",
+      "verification_scope": "Original browser fixture audit; new token-entry transport was typechecked/built, not browser-retested in Phase 3.5"
     },
     {
       "feature": "Phase 1 invalid session-kind handling",
-      "status": "BROKEN",
-      "evidence": "Commerce session passed to single-session reader returns 500",
+      "status": "WORKING",
+      "evidence": "Resolved and verified in Phase 3.5 targeted tests and final full suite",
       "file_function": "api/routes.py: purchase",
-      "test_result": "AUD-003 strict xfail; unmasked failure"
+      "test_result": "PASS without expected-failure markers"
     },
     {
       "feature": "Phase 2 real AI multi-intent extraction",
@@ -171,10 +172,10 @@
     },
     {
       "feature": "Phase 1/2 mid-planning interruption persistence",
-      "status": "PARTIAL",
-      "evidence": "Completed results saved, but failed planning is not checkpointed node-by-node",
-      "file_function": "api/routes.py: analyze, services/plans.py: generate",
-      "test_result": "Source review; no Phase 1/2 interrupted-planning resume acceptance"
+      "status": "WORKING",
+      "evidence": "Resolved and verified in Phase 3.5 targeted tests and final full suite",
+      "file_function": "agents/checkpoints.py; services/single_recovery.py; services/plans.py",
+      "test_result": "PASS without expected-failure markers"
     },
     {
       "feature": "Provider abstraction",
@@ -304,17 +305,17 @@
     },
     {
       "feature": "Authentication/ownership controls",
-      "status": "NOT IMPLEMENTED",
-      "evidence": "Anonymous second client can read and approve an order",
-      "file_function": "main.py, API dependencies",
-      "test_result": "Observational audit test confirms local-only boundary"
+      "status": "PARTIAL",
+      "evidence": "Authenticated local bearer identity and server-assigned/inherited ownership; public lifecycle hardening remains",
+      "file_function": "core/auth.py; purchase_sessions.owner_id",
+      "test_result": "Anonymous and cross-user denial tests pass"
     },
     {
       "feature": "Controlled database-outage response",
-      "status": "BROKEN",
-      "evidence": "Failed SQLite connection returns unhandled 500, not controlled 503",
+      "status": "WORKING",
+      "evidence": "Resolved and verified in Phase 3.5 targeted tests and final full suite",
       "file_function": "db/session.py, routes",
-      "test_result": "AUD-004 strict xfail; unmasked failure"
+      "test_result": "PASS without expected-failure markers"
     },
     {
       "feature": "Frontend compilation/type checking",
@@ -331,7 +332,201 @@
       "test_result": "npm run lint fails with Missing script"
     }
   ],
-  "test_executions": [
+  "final_suite": {
+    "collected": 179,
+    "passed": 179,
+    "failed": 0,
+    "expected_failures": 0,
+    "skipped": 0
+  },
+  "counting_note": "Per-run counts are not summed. Strict xfails represent unresolved defects. Unmasked diagnostics deliberately fail. Ordinary skipped tests are distinct from expected failures.",
+  "issue_ids": [
+    "AUD-001",
+    "AUD-002",
+    "AUD-003",
+    "AUD-004",
+    "AUD-005",
+    "AUD-006"
+  ],
+  "issues": [
+    {
+      "id": "AUD-001",
+      "severity": "P2",
+      "description": "No authentication or ownership controls; local-only deployment boundary",
+      "file": "backend/app/main.py; backend/app/api/*",
+      "evidence": "Independent anonymous client read and approved a known order",
+      "threat_model": "Documented local-only limitation; blocker if publicly exposed",
+      "recommended_fix": "Authentication, ownership checks and restricted demo routes before external deployment",
+      "status": "PARTIAL_LOCAL_FOUNDATION_PUBLIC_HARDENING_REQUIRED",
+      "current_evidence": "Operator-provisioned bearer identity; server-assigned root ownership; inherited transaction ownership; anonymous 401 and cross-user 404 verified"
+    },
+    {
+      "id": "AUD-002",
+      "severity": "P1",
+      "description": "Phase 1 seller changes after approval are accepted at mock payment",
+      "file": "backend/app/services/orders.py:33 verify_single",
+      "reproduction": [
+        "Create single-product order",
+        "Approve order",
+        "Change seller while keeping ID, price and eligibility",
+        "Submit payment"
+      ],
+      "observed": "HTTP 200 PAID",
+      "expected": "HTTP 409 and fresh authorization",
+      "test": "test_approved_single_order_rejects_changed_seller",
+      "recommended_fix": "Persist and bind approved material terms with a snapshot/digest",
+      "status": "RESOLVED",
+      "current_evidence": "Shared Decimal-normalized canonical purchase terms and SHA-256 fingerprint; material legacy and suborder mutation tests pass"
+    },
+    {
+      "id": "AUD-003",
+      "severity": "P2",
+      "description": "Cross-phase session ID triggers a response-validation HTTP 500",
+      "file": "backend/app/api/routes.py:37 purchase",
+      "observed": "HTTP 500",
+      "expected": "HTTP 404 or 422",
+      "test": "test_cross_phase_session_read_is_a_client_error",
+      "recommended_fix": "Validate session kind before constructing a response",
+      "status": "RESOLVED",
+      "current_evidence": "Session-kind guard returns controlled 404; original regression passes"
+    },
+    {
+      "id": "AUD-004",
+      "severity": "P2",
+      "description": "Database connection outage returns unhandled HTTP 500",
+      "file": "backend/app/db/session.py:8 get_db; API exception handling",
+      "observed": "HTTP 500 for induced unavailable SQLite connection",
+      "expected": "Controlled HTTP 503",
+      "test": "test_database_outage_has_controlled_service_response",
+      "recommended_fix": "Safe outage handling, rollback/cleanup and readiness checks",
+      "status": "RESOLVED",
+      "current_evidence": "Central DBAPI/OperationalError handler and rollback return sanitized structured 503; original regression passes"
+    },
+    {
+      "id": "AUD-005",
+      "severity": "P2",
+      "description": "Phase 1/2 persist completed planning results, not interrupted node checkpoints",
+      "file": "backend/app/api/routes.py analyze; backend/app/services/plans.py generate",
+      "evidence": "Source: graph invocation precedes persistence; Phase 2 checkout resumes only completed planning",
+      "recommended_fix": "Allocate session before planning and checkpoint stages if uniform resumability is required",
+      "status": "RESOLVED",
+      "current_evidence": "Persisted Phase 1/2 node checkpoints; resume retains interpretation and rediscovers stock; incomplete checkout denied"
+    },
+    {
+      "id": "AUD-006",
+      "severity": "P3",
+      "description": "Frontend lint gate is not configured",
+      "file": "frontend/package.json",
+      "observed": "npm run lint: Missing script lint",
+      "recommended_fix": "Configure compatible lint tooling and CI script",
+      "status": "OPEN"
+    }
+  ],
+  "severity_counts": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1,
+    "P3": 1
+  },
+  "browser_verification": {
+    "ai_mode_phase1_2": "FIXED_AUDIT_FIXTURE_NOT_GEMINI",
+    "phase3_input_mode": "structured",
+    "phase1": {
+      "status": "PAID",
+      "amount_inr": "58500",
+      "comparison": true,
+      "history_restore_after_reload": true
+    },
+    "phase2": {
+      "status": "PAID",
+      "amount_inr": "90400",
+      "items": 5,
+      "alternative_totals_inr": [
+        "88300",
+        "90400",
+        "86500"
+      ]
+    },
+    "phase3": {
+      "sequence": [
+        "APPROVED",
+        "PAYMENT_UNKNOWN",
+        "reconcile",
+        "resume",
+        "PAID"
+      ],
+      "amount_inr": "90263.75",
+      "merchant_attempts": 3,
+      "provider_receipts": 3,
+      "all_suborders": "CAPTURED",
+      "replanned_session_version": 2
+    },
+    "observed_console_errors": 0,
+    "screenshot_files": [
+      "docs/validation/audit-phase1-paid.jpg",
+      "docs/validation/audit-phase2-paid.jpg",
+      "docs/validation/audit-phase3-paid.jpg"
+    ]
+  },
+  "security": {
+    "tracked_files_pattern_scanned": 127,
+    "credential_pattern_file_hits": [],
+    "tracked_non_example_environment_files": [],
+    "tracked_database_files": [],
+    "scan_limits": "Recognizable credential formats in current tracked files only; not all history or all credential formats",
+    "anonymous_access_demonstrated": false,
+    "sql_like_identifier_probe": "404; valid order remained readable",
+    "npm_vulnerabilities_reported": 0,
+    "python_advisory_scan": "NOT RUN",
+    "historical_anonymous_access_demonstrated": true,
+    "auth_mode": "Operator-provisioned bearer tokens, minimum 32 characters; no anonymous identity; no public-deployment claim",
+    "ownership": "Root session owner assigned from server identity; orders, carts, suborders, attempts and transactions inherit it through parent foreign keys",
+    "unowned_legacy_records": "Preserved and denied until explicit operator assignment; no automatic ownership guessing"
+  },
+  "unverified_functionality": [
+    "Live Gemini extraction and explanation selection",
+    "PostgreSQL runtime, migrations and concurrent processes",
+    "Live merchant integration (adapter absent)",
+    "Sandbox/live payment integration (adapter absent)",
+    "Real fulfillment/inventory reservation",
+    "Public deployment and user isolation",
+    "Python dependency advisory scan",
+    "Public production credential lifecycle, TLS hardening and PostgreSQL concurrent-process acceptance"
+  ],
+  "production_behavior_changed": true,
+  "phase4_implemented_during_audit": false,
+  "artifacts": {
+    "report": "AUDIT_REPORT.md",
+    "results": "AUDIT_RESULTS.json",
+    "audit_tests": "backend/tests/test_audit_regressions.py",
+    "ui_harness": "backend/tests/audit_ui_server.py"
+  },
+  "temporary_tool_block": "Historical audit usage-limit interruption only; Phase 3.5 completed without bypassing approval checks.",
+  "historical_audit": {
+    "timestamp": "2026-11-06T11:19:18.518253+00:00",
+    "git_commit_sha": "74c968391477ccdaf02959b0d25e7b3a4113dbbb",
+    "final_suite": {
+      "collected": 165,
+      "passed": 162,
+      "failed": 0,
+      "expected_failures": 3,
+      "skipped": 0
+    },
+    "unmasked_regressions": {
+      "collected": 7,
+      "passed": 4,
+      "failed": 3,
+      "expected_failures": 0,
+      "skipped": 0
+    },
+    "severity_counts": {
+      "P0": 0,
+      "P1": 1,
+      "P2": 4,
+      "P3": 1
+    }
+  },
+  "historical_test_executions": [
     {
       "command": ".\\.venv\\Scripts\\python -m pytest -q -ra --junitxml=docs/validation/audit.xml",
       "working_directory": "repository root",
@@ -423,166 +618,112 @@
       "error": "Command not found; PostgreSQL/Compose runtime not verified"
     }
   ],
-  "final_suite": {
-    "collected": 165,
-    "passed": 162,
-    "failed": 0,
-    "expected_failures": 3,
-    "skipped": 0
-  },
-  "unmasked_regression_run": {
-    "collected": 7,
-    "passed": 4,
-    "failed": 3,
-    "expected_failures": 0,
-    "skipped": 0
-  },
-  "counting_note": "Per-run counts are not summed. Strict xfails represent unresolved defects. Unmasked diagnostics deliberately fail. Ordinary skipped tests are distinct from expected failures.",
-  "issue_ids": [
-    "AUD-001",
-    "AUD-002",
-    "AUD-003",
-    "AUD-004",
-    "AUD-005",
-    "AUD-006"
-  ],
-  "issues": [
+  "test_executions": [
     {
-      "id": "AUD-001",
-      "severity": "P2",
-      "description": "No authentication or ownership controls; local-only deployment boundary",
-      "file": "backend/app/main.py; backend/app/api/*",
-      "evidence": "Independent anonymous client read and approved a known order",
-      "threat_model": "Documented local-only limitation; blocker if publicly exposed",
-      "recommended_fix": "Authentication, ownership checks and restricted demo routes before external deployment"
+      "command": ".\\.venv\\Scripts\\python -m pytest -q --tb=short --junitxml=docs/validation/phase35.xml",
+      "status": "FAIL_THEN_RESOLVED",
+      "result": {
+        "collected": 179,
+        "passed": 127,
+        "failed": 52,
+        "expected_failures": 0,
+        "skipped": 0
+      },
+      "duration_seconds": 39.11,
+      "reason": "Standalone evaluation harness had not supplied authentication credentials"
     },
     {
-      "id": "AUD-002",
-      "severity": "P1",
-      "description": "Phase 1 seller changes after approval are accepted at mock payment",
-      "file": "backend/app/services/orders.py:33 verify_single",
-      "reproduction": [
-        "Create single-product order",
-        "Approve order",
-        "Change seller while keeping ID, price and eligibility",
-        "Submit payment"
-      ],
-      "observed": "HTTP 200 PAID",
-      "expected": "HTTP 409 and fresh authorization",
-      "test": "test_approved_single_order_rejects_changed_seller",
-      "recommended_fix": "Persist and bind approved material terms with a snapshot/digest"
+      "command": ".\\.venv\\Scripts\\python -m pytest -q backend/tests/test_evaluation.py -k \"single-01 or price_increase-01 or payment_failure-01\" --tb=short",
+      "status": "PASS",
+      "passed": 3,
+      "deselected": 49
     },
     {
-      "id": "AUD-003",
-      "severity": "P2",
-      "description": "Cross-phase session ID triggers a response-validation HTTP 500",
-      "file": "backend/app/api/routes.py:37 purchase",
-      "observed": "HTTP 500",
-      "expected": "HTTP 404 or 422",
-      "test": "test_cross_phase_session_read_is_a_client_error",
-      "recommended_fix": "Validate session kind before constructing a response"
+      "command": ".\\.venv\\Scripts\\python -m pytest -q --tb=short --junitxml=docs/validation/phase35.xml",
+      "status": "PASS",
+      "result": {
+        "collected": 179,
+        "passed": 179,
+        "failed": 0,
+        "expected_failures": 0,
+        "skipped": 0
+      },
+      "duration_seconds": 52.0
     },
     {
-      "id": "AUD-004",
-      "severity": "P2",
-      "description": "Database connection outage returns unhandled HTTP 500",
-      "file": "backend/app/db/session.py:8 get_db; API exception handling",
-      "observed": "HTTP 500 for induced unavailable SQLite connection",
-      "expected": "Controlled HTTP 503",
-      "test": "test_database_outage_has_controlled_service_response",
-      "recommended_fix": "Safe outage handling, rollback/cleanup and readiness checks"
+      "command": "npm run typecheck",
+      "working_directory": "frontend",
+      "status": "PASS"
     },
     {
-      "id": "AUD-005",
-      "severity": "P2",
-      "description": "Phase 1/2 persist completed planning results, not interrupted node checkpoints",
-      "file": "backend/app/api/routes.py analyze; backend/app/services/plans.py generate",
-      "evidence": "Source: graph invocation precedes persistence; Phase 2 checkout resumes only completed planning",
-      "recommended_fix": "Allocate session before planning and checkpoint stages if uniform resumability is required"
+      "command": "npm run build",
+      "working_directory": "frontend",
+      "status": "PASS",
+      "execution_count": 1
     },
     {
-      "id": "AUD-006",
-      "severity": "P3",
-      "description": "Frontend lint gate is not configured",
-      "file": "frontend/package.json",
-      "observed": "npm run lint: Missing script lint",
-      "recommended_fix": "Configure compatible lint tooling and CI script"
+      "command": "One read-only PostgreSQL SELECT 1 probe with connect_timeout=2",
+      "status": "BLOCKED",
+      "error_type": "OperationalError",
+      "docker_available": false,
+      "psql_available": true,
+      "database_wiped": false
     }
   ],
-  "severity_counts": {
-    "P0": 0,
-    "P1": 1,
-    "P2": 4,
-    "P3": 1
-  },
-  "browser_verification": {
-    "ai_mode_phase1_2": "FIXED_AUDIT_FIXTURE_NOT_GEMINI",
-    "phase3_input_mode": "structured",
-    "phase1": {
-      "status": "PAID",
-      "amount_inr": "58500",
-      "comparison": true,
-      "history_restore_after_reload": true
-    },
-    "phase2": {
-      "status": "PAID",
-      "amount_inr": "90400",
-      "items": 5,
-      "alternative_totals_inr": [
-        "88300",
-        "90400",
-        "86500"
-      ]
-    },
-    "phase3": {
-      "sequence": [
-        "APPROVED",
-        "PAYMENT_UNKNOWN",
-        "reconcile",
-        "resume",
-        "PAID"
-      ],
-      "amount_inr": "90263.75",
-      "merchant_attempts": 3,
-      "provider_receipts": 3,
-      "all_suborders": "CAPTURED",
-      "replanned_session_version": 2
-    },
-    "observed_console_errors": 0,
-    "screenshot_files": [
-      "docs/validation/audit-phase1-paid.jpg",
-      "docs/validation/audit-phase2-paid.jpg",
-      "docs/validation/audit-phase3-paid.jpg"
+  "severity_counting_note": "Remaining issues only; historical counts retained under historical_audit. Public-deployment hardening remains P2 and lint tooling P3. External verification gaps are listed separately.",
+  "stabilization": {
+    "phase": "3.5",
+    "critical_defects_fixed": [
+      "AUD-002",
+      "AUD-003",
+      "AUD-004",
+      "AUD-005"
+    ],
+    "three_original_regressions": "PASS normally; markers removed, assertions retained",
+    "public_authentication_issue": "PARTIAL; local foundation complete",
+    "migrations": [
+      "0007",
+      "0008"
+    ],
+    "full_backend_runs": 2,
+    "rerun_reason": "Genuine authentication compatibility failures in the standalone evaluation harness",
+    "frontend_build_runs": 1,
+    "targeted_pass_counts": [
+      26,
+      21,
+      22,
+      11,
+      14,
+      8,
+      12,
+      3
+    ],
+    "targeted_counting_note": "Separate per-run totals, not summed; tests overlap",
+    "gemini_static_verification": "Official SDK, model, schema, timeout/error handling and bounded smoke behavior verified with mocks",
+    "estimated_live_gemini_calls": 0,
+    "actual_live_gemini_calls": 0,
+    "live_smoke_executed": false,
+    "optional_smoke_command": "python -m app.services.gemini_smoke --allow-one-request",
+    "smoke_request_limit": 1,
+    "smoke_output_token_limit": 64,
+    "postgresql": "UNAVAILABLE: one read-only connection attempt failed; no installation or database wipe",
+    "remaining_limitations": [
+      "Operator-provisioned local credentials are not a public identity platform",
+      "Existing unowned history requires explicit operator assignment",
+      "Old unpaid orders without immutable selected terms must be recreated and freshly approved",
+      "Live Gemini and PostgreSQL verification remain blocked",
+      "Frontend lint and Python advisory tooling remain unavailable; no unnecessary dependencies installed"
+    ],
+    "development_failures_resolved": [
+      "Pre-flush legacy currency default caused fingerprint mismatch; canonical fallback corrected",
+      "Interrupted recommendations lacked explanation fields; explicit pending status rendered and checkout denied",
+      "Evaluation fixtures lacked bearer credentials; isolated credentials added without weakening checks"
+    ],
+    "implementation_commits": [
+      "03b616e",
+      "8b22f8c",
+      "904ef57",
+      "32881f4"
     ]
-  },
-  "security": {
-    "tracked_files_pattern_scanned": 127,
-    "credential_pattern_file_hits": [],
-    "tracked_non_example_environment_files": [],
-    "tracked_database_files": [],
-    "scan_limits": "Recognizable credential formats in current tracked files only; not all history or all credential formats",
-    "anonymous_access_demonstrated": true,
-    "sql_like_identifier_probe": "404; valid order remained readable",
-    "npm_vulnerabilities_reported": 0,
-    "python_advisory_scan": "NOT RUN"
-  },
-  "unverified_functionality": [
-    "Live Gemini extraction and explanation selection",
-    "PostgreSQL runtime, migrations and concurrent processes",
-    "Live merchant integration (adapter absent)",
-    "Sandbox/live payment integration (adapter absent)",
-    "Real fulfillment/inventory reservation",
-    "Public deployment and user isolation",
-    "Python dependency advisory scan",
-    "Phase 1/2 mid-planning interrupted resume"
-  ],
-  "production_behavior_changed": false,
-  "phase4_implemented_during_audit": false,
-  "artifacts": {
-    "report": "AUDIT_REPORT.md",
-    "results": "AUDIT_RESULTS.json",
-    "audit_tests": "backend/tests/test_audit_regressions.py",
-    "ui_harness": "backend/tests/audit_ui_server.py"
-  },
-  "temporary_tool_block": "Automatic approval review temporarily could not run due to usage limits. It recovered after user continuation; no approval check was bypassed."
+  }
 }
