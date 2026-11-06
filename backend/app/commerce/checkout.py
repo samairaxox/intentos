@@ -28,6 +28,8 @@ def create_purchase(db,request,ai):
     for line in snapshot['items']:grouped[line['offer']['merchant_id']].append(line)
     amount=sum((Decimal(i['line_total']) for i in snapshot['items']),Decimal('0.00'))
     if amount!=Decimal(snapshot['total']) or amount>Decimal(plan.intent['total_budget']):raise HTTPException(409,'Server-side total does not match plan budget')
+    from app.finance.service import policy_check
+    policy_check(db,plan,snapshot,exposure=True)
     purchase=CommercePurchase(plan_id=plan.id,snapshot=snapshot,amount=amount,status='PENDING_APPROVAL',idempotency_key=request.idempotency_key,alternative_index=request.alternative_index)
     try:
         db.add(purchase);db.flush()

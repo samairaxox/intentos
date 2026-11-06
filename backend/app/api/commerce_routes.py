@@ -70,6 +70,8 @@ def read_plan(plan_id:str,db:Session=Depends(get_db)):
 @router.post('/plans/{plan_id}/resume',response_model=PlanView)
 def resume(plan_id:str,db:Session=Depends(get_db),ai=Depends(get_commerce_ai)):
     plan=sessions.plan_for(db,plan_id);session=sessions.session_for(db,plan.session_id)
+    from app.finance.service import is_financial
+    if is_financial(db,plan.session_id):raise HTTPException(409,'Resume through the financial decision API')
     if plan.id!=session.latest_plan_id or plan.status=='INVALIDATED':raise HTTPException(409,{'message':'Resume the latest plan','revised_plan_id':session.latest_plan_id})
     ai_call(run_planning,db,plan,ai);session.intent=plan.intent;sessions.save_snapshots(db,plan);db.commit()
     return sessions.present_plan(db,plan)

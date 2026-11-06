@@ -111,6 +111,8 @@ def new_version(db,session,intent,ai,reasons,ai_used=False):
 
 
 def update_session(db,session_id,request,ai):
+    from app.finance.service import is_financial
+    if is_financial(db,session_id): raise HTTPException(409,"Use financial goal revision to preserve reserve constraints")
     session=session_for(db,session_id)
     if session.version!=request.expected_version:raise HTTPException(409,'Session version changed; reload before applying preferences')
     intent=CommerceIntent.model_validate(session.intent)
@@ -153,16 +155,29 @@ def material_changes(db,snapshot):
 
 
 def replan(db,plan,ai,reasons=None):
+    from app.finance.service import is_financial
+    if is_financial(db,plan.session_id): raise HTTPException(409,"Replan through the financial decision API")
     session=session_for(db,plan.session_id)
     if session.latest_plan_id!=plan.id:return plan_for(db,session.latest_plan_id)
     return new_version(db,session,CommerceIntent.model_validate(session.intent),ai,reasons or ['Explicit discovery refresh requested'])
 
 
 def ensure_current(db,plan,snapshot,ai):
+    from app.finance.service import policy_check
+    policy_check(db,plan,snapshot)
     if plan.status!='AWAITING_SELECTION':
         session=session_for(db,plan.session_id)
         raise HTTPException(409,{'message':'Plan is not valid for checkout','revised_plan_id':session.latest_plan_id if session.latest_plan_id!=plan.id else None})
     reasons=material_changes(db,snapshot)
     if reasons:
+        from app.models.finance import FinancialPlanLink
+        link=db.get(FinancialPlanLink,plan.id)
+        if link:
+            from app.finance.service import revise,decision_for
+            from app.finance.schemas import FinancialGoal
+            from app.finance.workflow import FinancialAI
+            previous=decision_for(db,link.decision_id)
+            updated=revise(db,previous,FinancialGoal.model_validate(previous.goal),FinancialAI())
+            raise HTTPException(409,{"message":"Financial quotes changed; review and approve new terms","revised_decision_id":updated.id,"changes":reasons})
         revised=replan(db,plan,ai,reasons)
         raise HTTPException(409,{'message':'Approved offers changed. Review revised terms and approve again.','revised_plan_id':revised.id,'changes':reasons})

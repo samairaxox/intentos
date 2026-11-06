@@ -18,6 +18,8 @@ app.add_middleware(CORSMiddleware,allow_origins=["http://localhost:3000","http:/
 app.include_router(router)
 app.include_router(commerce_router)
 app.include_router(multi_router)
+from app.api.finance_routes import router as finance_router
+app.include_router(finance_router)
 
 @app.get("/health")
 def health() -> dict:

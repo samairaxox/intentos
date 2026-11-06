@@ -1,5 +1,4 @@
 """Evidence-grounded planning. Risk indices are policy penalties, never probabilities."""
-from copy import deepcopy
 from decimal import Decimal
 from time import perf_counter
 from app.commerce.schemas import aware, utc, MerchantOffer

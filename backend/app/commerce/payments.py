@@ -70,6 +70,8 @@ class PaymentAuthorizationService:
         db.commit();return purchase
 
     def verify_amounts(self,db,purchase):
+        from app.finance.service import policy_check
+        policy_check(db,db.get(CommercePlan,purchase.plan_id),purchase.snapshot,purchase_id=purchase.id,exposure=True)
         if sum((s.amount for s in suborders(db,purchase)),Decimal('0.00'))!=purchase.amount or purchase.amount!=Decimal(purchase.snapshot['total']):raise HTTPException(409,'Server-side parent amount mismatch')
         for sub in suborders(db,purchase):
             intent=intent_for(db,sub)

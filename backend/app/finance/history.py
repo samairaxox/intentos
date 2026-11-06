@@ -49,6 +49,13 @@ def history(db, offer_id, mode='recorded', at=None):
     deviation = (sum((v-mean)**2 for v in values)/len(values)).sqrt()
     span = (aware(rows[-1].observed_at)-aware(rows[0].observed_at)).total_seconds()/86400
     distinct = len({aware(r.observed_at).date() for r in rows})
+    from app.commerce.store import current_offer
+    current=current_offer(db,offer_id)
+    if current:
+        current_price=Decimal(TotalCostService().calculate(current)['final_price'])
+        result['current_price']=format(current_price,'.2f')
+        result['current_minus_average']=format(current_price-mean,'.2f')
+        result['current_minus_minimum']=format(current_price-min(values),'.2f')
     result.update(minimum=format(min(values),'.2f'), maximum=format(max(values),'.2f'), average=format(mean,'.2f'),
         standard_deviation=format(deviation,'.2f'), volatility_percent=format(deviation/mean*100 if mean else Decimal(0),'.2f'),
         recent_change=format(values[-1]-values[-2],'.2f') if len(values)>1 else None,
