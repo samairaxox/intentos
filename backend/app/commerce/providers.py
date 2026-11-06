@@ -42,7 +42,8 @@ class DemoCatalogProvider(ProductProvider):
                 if key in raw: specs[key]=raw[key]
             products.append(CanonicalProduct(id=raw["id"],category=raw["category"],brand=raw["brand"],model=raw["model"],name=raw["name"],specifications=specs,performance=raw["performance"],quality_score=raw["quality_score"]))
             for slot in range(2):
-                merchant_id,name=self.merchants[(i+slot)%3]
+                merchant_group={"laptop":0,"monitor":1,"keyboard":2,"mouse":0,"headphones":1}[raw["category"]]
+                merchant_id,name=self.merchants[(merchant_group+slot)%3]
                 offer_id=f"{raw['id']}:{merchant_id}"
                 if offer_id in self.persisted:
                     offers.append(self.persisted[offer_id]);continue

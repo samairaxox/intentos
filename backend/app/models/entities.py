@@ -83,3 +83,6 @@ class OrderItem(Base):
     unit_price: Mapped[int] = mapped_column(Integer)
     seller: Mapped[str] = mapped_column(String(200))
     snapshot: Mapped[dict] = mapped_column(JSON)
+
+# Register additive commerce tables with the shared metadata.
+from app.models import commerce as _commerce
