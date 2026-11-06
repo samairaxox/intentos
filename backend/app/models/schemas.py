@@ -94,7 +94,7 @@ class Recommendation(BaseModel):
 class PurchaseOut(BaseModel):
     id: str
     text: str
-    status: Literal["READY", "NO_MATCH", "NEEDS_DETAILS"]
+    status: Literal["READY", "NO_MATCH", "NEEDS_DETAILS", "PLANNING", "INTERRUPTED"]
     intent: Intent
     steps: list[str]
     recommendations: list[Recommendation] = Field(default_factory=list)

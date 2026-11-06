@@ -7,6 +7,7 @@ from app.db.session import get_db
 from app.models.entities import PurchaseSession, Product, AuditEvent, Payment, OrderItem
 from app.models.schemas import AnalyzeRequest, CreateOrder, Approval, PayRequest, OrderOut, PaymentOut, CatalogProduct, PurchaseOut, EventOut
 from app.services.catalog import LocalCatalogProvider
+from app.agents.checkpoints import PlanningInterrupted
 from app.services.gemini import GeminiService, AIUnavailable
 from app.agents.workflow import build_workflow
 from app.services import orders
@@ -22,21 +23,25 @@ def products(db: Session = Depends(get_db)) -> list[dict]:
 
 @router.post("/purchases/analyze", status_code=201, response_model=PurchaseOut)
 def analyze(request: AnalyzeRequest, db: Session = Depends(get_db), ai = Depends(get_ai)) -> dict:
-    try:
-        result = build_workflow(ai, LocalCatalogProvider(db)).invoke({"text":request.text})
-    except AIUnavailable as exc:
-        logger.warning('gemini_unavailable')
-        raise HTTPException(503,str(exc)) from exc
-    result.pop("products",None); result.pop("eligible",None)
-    session = PurchaseSession(request=request.text,result=result)
-    db.add(session); db.commit()
-    logger.info('purchase_analyzed', extra={"session_id":session.id,"workflow_status":result["status"]})
-    return {"id":session.id,**result}
+    from app.services import single_recovery
+    try:session=single_recovery.create(db,request.text,ai)
+    except (AIUnavailable,PlanningInterrupted) as exc:
+        raise HTTPException(503,{'message':str(exc),'session_id':getattr(exc,'purchase_session_id',None)}) from exc
+    return single_recovery.present(session)
+
+@router.post('/purchases/{session_id}/resume',response_model=PurchaseOut)
+def resume_single(session_id:str,db:Session=Depends(get_db),ai=Depends(get_ai)):
+    from app.services import single_recovery
+    try:session=single_recovery.run(db,orders.single_session(db,session_id),ai,resume=True)
+    except (AIUnavailable,PlanningInterrupted) as exc:
+        raise HTTPException(503,{'message':str(exc),'session_id':session_id}) from exc
+    return single_recovery.present(session)
 
 @router.get("/purchases/{session_id}", response_model=PurchaseOut)
 def purchase(session_id: str, db: Session = Depends(get_db)) -> dict:
     session = orders.single_session(db,session_id)
-    return {"id":session.id,**session.result}
+    from app.services.single_recovery import present
+    return present(session)
 
 @router.post("/orders", response_model=OrderOut, status_code=201)
 def create(request: CreateOrder, db: Session = Depends(get_db)):

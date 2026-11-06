@@ -27,7 +27,9 @@ def test_commerce_children_cannot_bypass_ownership(client):
 
 def test_authentication_fail_closed_and_client_owner_rejected(client,monkeypatch):
     with TestClient(app) as anonymous:
-        assert anonymous.get('/api/v1/products').status_code==401
+        response=anonymous.get('/api/v1/products',headers={'Origin':'http://localhost:3000'})
+        assert response.status_code==401
+        assert response.headers['access-control-allow-origin']=='http://localhost:3000'
     assert client.post('/api/v1/purchases/analyze',json={'text':'Find a laptop under 75000','owner_id':'user-b'}).status_code==422
     from app.core.config import settings
     monkeypatch.setattr(settings,'auth_tokens',{})

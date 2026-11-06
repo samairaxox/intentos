@@ -1,6 +1,7 @@
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 from app.models.multi_schemas import MultiIntent
+from app.agents.checkpoints import checkpoint_node
 from app.services.budget_optimizer import candidates_for, optimize
 
 class MultiState(TypedDict, total=False):
@@ -11,12 +12,13 @@ class MultiState(TypedDict, total=False):
     result: dict
     status: str
     steps: list[str]
+    completed: list[str]
     selected_index: int
     selection: dict
     awaiting_selection: bool
 
 
-def planning_graph(ai, provider):
+def planning_graph(ai, provider, checkpoint=None):
     def parse(s):
         intent = MultiIntent.model_validate(s["intent"]) if "intent" in s else ai.parse_multi(s["text"])
         return {"intent":intent.model_dump(),"steps":["Parse Multi-Product Intent"]}
@@ -47,7 +49,7 @@ def planning_graph(ai, provider):
         if index < 0 or index >= len(combinations): raise ValueError("Unknown plan alternative")
         return {"selection":combinations[index],"awaiting_selection":False,"steps":s["steps"]+["Prepare Checkout"]}
     graph=StateGraph(MultiState)
-    for name,fn in {"parse":parse,"validate":validate,"discover":discover,"filter":filter_products,"optimize":optimize_budget,"evaluate":evaluate,"explain":explain,"await":await_selection,"checkout":checkout}.items(): graph.add_node(name,fn)
+    for name,fn in {"parse":parse,"validate":validate,"discover":discover,"filter":filter_products,"optimize":optimize_budget,"evaluate":evaluate,"explain":explain,"await":await_selection,"checkout":checkout}.items(): graph.add_node(name,checkpoint_node(name,fn,checkpoint))
     graph.add_edge(START,"parse");graph.add_edge("parse","validate")
     graph.add_conditional_edges("validate",lambda s:"stop" if s["status"]=="NEEDS_DETAILS" else "continue",{"stop":END,"continue":"discover"})
     for a,b in [("discover","filter"),("filter","optimize"),("optimize","evaluate"),("evaluate","explain"),("explain","await")]: graph.add_edge(a,b)

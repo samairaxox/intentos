@@ -13,7 +13,7 @@ def single_session(db,session_id):
     session=db.get(PurchaseSession,session_id)
     if not session or session.result.get('kind') in ['multi','commerce','financial']:
         raise HTTPException(404,'Single-product purchase session not found')
-    if 'intent' not in session.result:raise HTTPException(404,'Single-product purchase session not found')
+    if 'intent' not in session.result and session.result.get('kind')!='single':raise HTTPException(404,'Single-product purchase session not found')
     return session
 
 def get_order(db, order_id):
@@ -58,6 +58,7 @@ def create_order(db, request):
             raise HTTPException(409, "Idempotency key reused for a different order")
         return existing
     session = single_session(db,request.session_id)
+    if session.result.get('status')!='READY':raise HTTPException(409,'Complete the purchase workflow before selecting an order')
     if request.product_id not in [r["product"]["id"] for r in session.result.get("recommendations",[])]:
         raise HTTPException(422, "Select an eligible recommendation from this session")
     product = db.get(Product, request.product_id)

@@ -11,6 +11,7 @@ from app.services import plans
 from app.services.budget_optimizer import optimize
 from app.services.bundle_checkout import create_bundle_order
 from app.services.catalog import LocalCatalogProvider
+from app.agents.checkpoints import PlanningInterrupted
 from app.services.gemini import AIUnavailable
 
 router=APIRouter(prefix="/api/v1")
@@ -23,8 +24,8 @@ def catalog(category: str | None = None, db: Session = Depends(get_db)):
 def analyze(request: AnalyzeRequest, db: Session = Depends(get_db), ai=Depends(get_ai)):
     try:
         plan=plans.generate(db,text=request.text,ai=ai)
-    except AIUnavailable as exc:
-        raise HTTPException(503,str(exc)) from exc
+    except (AIUnavailable,PlanningInterrupted) as exc:
+        raise HTTPException(503,{"message":str(exc),"plan_id":getattr(exc,"purchase_plan_id",None)}) from exc
     db.commit()
     return plans.present(plan)
 
@@ -84,3 +85,10 @@ def edit_cart(cart_id: str, request: CartUpdate, db: Session = Depends(get_db)):
 @router.post("/multi/orders",response_model=OrderOut,status_code=201)
 def create_order(request: BundleOrderRequest, db: Session = Depends(get_db)):
     return create_bundle_order(db,request)
+
+
+@router.post('/plans/{plan_id}/resume',response_model=PlanOut)
+def resume(plan_id:str,db:Session=Depends(get_db),ai=Depends(get_ai)):
+    try:plan=plans.run_planning(db,plans.get_plan(db,plan_id),ai,resume=True)
+    except (AIUnavailable,PlanningInterrupted) as exc:raise HTTPException(503,{'message':str(exc),'plan_id':plan_id}) from exc
+    return plans.present(plan)

@@ -1,6 +1,7 @@
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 from app.models.schemas import Intent
+from app.agents.checkpoints import checkpoint_node
 from app.services.optimization import eligible, rank
 
 class WorkflowState(TypedDict, total=False):
@@ -11,8 +12,9 @@ class WorkflowState(TypedDict, total=False):
     recommendations: list[dict]
     status: str
     steps: list[str]
+    completed: list[str]
 
-def build_workflow(ai, provider):
+def build_workflow(ai, provider, checkpoint=None):
     def parsed(s):
         return {"intent":ai.parse(s["text"]).model_dump(), "steps":["Intent Parser"]}
     def validated(s):
@@ -35,7 +37,7 @@ def build_workflow(ai, provider):
         return {"recommendations":[{**r,"explanation":explanations[r["product"]["id"]]} for r in s["recommendations"]],"steps":s["steps"]+["Explanation Generator"]}
     graph = StateGraph(WorkflowState)
     nodes = {"parser":parsed,"validator":validated,"discovery":discovered,"filter":filtered,"ranking":ranked,"explanation":explained}
-    for name,fn in nodes.items(): graph.add_node(name,fn)
+    for name,fn in nodes.items(): graph.add_node(name,checkpoint_node(name,fn,checkpoint))
     graph.add_edge(START,"parser")
     graph.add_edge("parser","validator")
     graph.add_conditional_edges("validator",lambda s: "stop" if s["status"]=="NEEDS_DETAILS" else "continue",{"stop":END,"continue":"discovery"})

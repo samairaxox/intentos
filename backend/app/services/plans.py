@@ -26,13 +26,36 @@ def present(plan: PurchasePlan) -> dict:
 def generate(db: Session, *, text: str = "Structured purchasing requirements", intent: MultiIntent | None = None, ai=None, parent: PurchasePlan | None = None) -> PurchasePlan:
     initial={"text":text}
     if intent is not None: initial["intent"]=intent.model_dump()
-    state=planning_graph(ai,LocalCatalogProvider(db)).invoke(initial)
-    state.pop("products",None)
-    session=PurchaseSession(request=text,result={"kind":"multi",**state})
+    session=PurchaseSession(request=text,result={'kind':'multi'})
     db.add(session);db.flush()
     plan=PurchasePlan(session_id=session.id,parent_id=parent.id if parent else None,revision=parent.revision+1 if parent else 1,
-                      status=state["status"],intent=state["intent"],result=state["result"],workflow=state,changes=[])
-    db.add(plan);db.flush()
+        status='PLANNING',intent=initial.get('intent',{}),result={},workflow={**initial,'steps':[],'completed':[]},changes=[])
+    db.add(plan);db.commit()
+    return run_planning(db,plan,ai)
+
+
+def run_planning(db,plan,ai=None,resume=False):
+    from app.agents.checkpoints import rediscover_after_interruption,PlanningInterrupted
+    from app.services.gemini import AIUnavailable
+    from sqlalchemy.exc import SQLAlchemyError
+    state=plan.workflow
+    if resume:
+        if plan.status not in ['INTERRUPTED','PLANNING']:return plan
+        state=rediscover_after_interruption(state,'parse','validate')
+    def save(s):
+        plan.workflow=s;plan.intent=s.get('intent',{});plan.result=s.get('result',{});plan.status=s.get('status','PLANNING')
+        db.get(PurchaseSession,plan.session_id).result={'kind':'multi','status':plan.status}
+        db.commit()
+    try:planning_graph(ai,LocalCatalogProvider(db),checkpoint=save).invoke(state)
+    except SQLAlchemyError:
+        db.rollback();raise
+    except Exception as exc:
+        db.rollback();plan.status='INTERRUPTED';db.commit()
+        if isinstance(exc,HTTPException):raise
+        import logging
+        logging.getLogger(__name__).error('multi_planning_interrupted: %s',type(exc).__name__)
+        error=exc if isinstance(exc,AIUnavailable) else PlanningInterrupted('Purchase planning interrupted; resume the saved plan')
+        setattr(error,'purchase_plan_id',plan.id);raise error from exc
     return plan
 
 
